@@ -19,7 +19,18 @@ public class Crack {
         System.out.println("Yo! Crack pulled up.");
         System.out.println("What we cooking today, gng?");
         System.out.println(DIVIDER);
-        System.out.println("Aight bet, imma fade");
-        System.out.println(DIVIDER);
+
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNextLine()) {
+            String input = scanner.nextLine();
+            System.out.println(DIVIDER);
+            if (input.equals("bye")) {
+                System.out.println("Aight bet, imma fade");
+                System.out.println(DIVIDER);
+                break;
+            }
+            System.out.println(input);
+            System.out.println(DIVIDER);
+        }
     }
 }
