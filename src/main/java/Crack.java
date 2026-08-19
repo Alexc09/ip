@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -7,17 +8,13 @@ public class Crack {
     /** Line drawn between messages. */
     private static final String DIVIDER = "_".repeat(60);
 
-    /** Cap on how many tasks we can hold. */
-    private static final int MAX_TASKS = 100;
-
     private static final String BANNER = "  ____                _    \n"
             + " / ___|_ __ __ _  ___| | __\n"
             + "| |   | '__/ _` |/ __| |/ /\n"
             + "| |___| | | (_| | (__|   < \n"
             + " \\____|_|  \\__,_|\\___|_|\\_\\";
 
-    private static final Task[] tasks = new Task[MAX_TASKS];
-    private static int taskCount = 0;
+    private static final ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
         System.out.println(DIVIDER);
@@ -58,6 +55,9 @@ public class Crack {
             return true;
         case "unmark":
             unmarkTask(parseIndex(arguments));
+            return true;
+        case "delete":
+            deleteTask(parseIndex(arguments));
             return true;
         case "todo":
             addTask(new Todo(requireDescription(arguments, "todo")));
@@ -116,43 +116,53 @@ public class Crack {
         } catch (NumberFormatException e) {
             throw new CrackException("'" + arguments + "' ain't a number, gng.");
         }
-        if (taskCount == 0) {
+        if (tasks.isEmpty()) {
             throw new CrackException("Your list is empty, ain't nothing to point at.");
         }
-        if (position < 1 || position > taskCount) {
-            throw new CrackException("You only got " + taskCount + (taskCount == 1 ? " task" : " tasks")
+        if (position < 1 || position > tasks.size()) {
+            throw new CrackException("You only got " + tasks.size() + (tasks.size() == 1 ? " task" : " tasks")
                     + ", so " + position + " ain't it.");
         }
         return position - 1;
     }
 
     /** Adds a task and says so. */
-    private static void addTask(Task task) throws CrackException {
-        if (taskCount == MAX_TASKS) {
-            throw new CrackException("List is maxed out at " + MAX_TASKS + ", can't fit no more.");
-        }
-        tasks[taskCount] = task;
-        taskCount++;
+    private static void addTask(Task task) {
+        tasks.add(task);
         System.out.println("Bet, added ts to the list:");
         System.out.println("  " + task);
-        System.out.println("You got " + taskCount + (taskCount == 1 ? " thing" : " things") + " lined up now.");
+        printCount();
+    }
+
+    /** Drops a task off the list. */
+    private static void deleteTask(int index) {
+        Task task = tasks.remove(index);
+        System.out.println("Aight, yeeted ts off the list:");
+        System.out.println("  " + task);
+        printCount();
+    }
+
+    /** Says how many tasks are left. */
+    private static void printCount() {
+        int count = tasks.size();
+        System.out.println("You got " + count + (count == 1 ? " thing" : " things") + " lined up now.");
     }
 
     /** Prints the whole list. */
     private static void listTasks() {
-        if (taskCount == 0) {
+        if (tasks.isEmpty()) {
             System.out.println("Your list is empty, you free rn.");
             return;
         }
         System.out.println("Here's what you got on deck:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println((i + 1) + "." + tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
         }
     }
 
     /** Marks a task done. */
     private static void markTask(int index) {
-        Task task = tasks[index];
+        Task task = tasks.get(index);
         task.markAsDone();
         System.out.println("Ayo let's go, ts is done:");
         System.out.println("  " + task);
@@ -160,7 +170,7 @@ public class Crack {
 
     /** Marks a task not done. */
     private static void unmarkTask(int index) {
-        Task task = tasks[index];
+        Task task = tasks.get(index);
         task.markAsNotDone();
         System.out.println("Aight, ts ain't done no more:");
         System.out.println("  " + task);
