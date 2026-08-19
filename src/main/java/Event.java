@@ -1,6 +1,4 @@
-/**
- * A task that spans a given start and end date/time.
- */
+/** A task that runs from one time to another. */
 public class Event extends Task {
     private final String from;
     private final String to;

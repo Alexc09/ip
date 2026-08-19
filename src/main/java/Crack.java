@@ -4,10 +4,10 @@ import java.util.Scanner;
  * Entry point of the Crack chatbot.
  */
 public class Crack {
-    /** Horizontal rule used to separate the chatbot's messages from each other. */
+    /** Line drawn between messages. */
     private static final String DIVIDER = "_".repeat(60);
 
-    /** Maximum number of tasks the chatbot can hold. */
+    /** Cap on how many tasks we can hold. */
     private static final int MAX_TASKS = 100;
 
     private static final String BANNER = "  ____                _    \n"
@@ -27,73 +27,140 @@ public class Crack {
         System.out.println(DIVIDER);
 
         Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNextLine()) {
+        boolean isRunning = true;
+        while (isRunning && scanner.hasNextLine()) {
             String input = scanner.nextLine().trim();
             System.out.println(DIVIDER);
-            if (input.equals("bye")) {
-                System.out.println("Aight bet, I'm finna fade.");
-                System.out.println(DIVIDER);
-                break;
-            } else if (input.equals("list")) {
-                listTasks();
-            } else if (input.startsWith("mark ")) {
-                markTask(input.substring("mark ".length()));
-            } else if (input.startsWith("unmark ")) {
-                unmarkTask(input.substring("unmark ".length()));
-            } else if (input.startsWith("todo ")) {
-                addTask(new Todo(input.substring("todo ".length())));
-            } else if (input.startsWith("deadline ")) {
-                addTask(parseDeadline(input.substring("deadline ".length())));
-            } else if (input.startsWith("event ")) {
-                addTask(parseEvent(input.substring("event ".length())));
-            } else {
-                System.out.println("Nah bro, I got no clue what ts means.");
+            try {
+                isRunning = handle(input);
+            } catch (CrackException e) {
+                System.out.println(e.getMessage());
             }
             System.out.println(DIVIDER);
         }
     }
 
-    /** Builds a deadline from an argument string of the form "description /by when". */
-    private static Task parseDeadline(String arguments) {
+    /** Runs one command. Returns false when it's time to stop. */
+    private static boolean handle(String input) throws CrackException {
+        String[] parts = input.split(" ", 2);
+        String command = parts[0];
+        String arguments = parts.length > 1 ? parts[1].trim() : "";
+
+        switch (command) {
+        case "bye":
+            System.out.println("Aight bet, I'm finna fade.");
+            return false;
+        case "list":
+            listTasks();
+            return true;
+        case "mark":
+            markTask(parseIndex(arguments));
+            return true;
+        case "unmark":
+            unmarkTask(parseIndex(arguments));
+            return true;
+        case "todo":
+            addTask(new Todo(requireDescription(arguments, "todo")));
+            return true;
+        case "deadline":
+            addTask(parseDeadline(arguments));
+            return true;
+        case "event":
+            addTask(parseEvent(arguments));
+            return true;
+        default:
+            throw new CrackException("Nah bro, I got no clue what ts means.");
+        }
+    }
+
+    /** Rejects a blank description. */
+    private static String requireDescription(String description, String taskType) throws CrackException {
+        if (description.isEmpty()) {
+            throw new CrackException("Nah gng, a " + taskType + " needs an actual description.");
+        }
+        return description;
+    }
+
+    /** Parses "description /by when". */
+    private static Task parseDeadline(String arguments) throws CrackException {
         String[] parts = arguments.split(" /by ", 2);
-        return new Deadline(parts[0], parts[1]);
+        if (parts.length < 2 || parts[1].isBlank()) {
+            throw new CrackException("A deadline needs a '/by', like: deadline return book /by Sunday");
+        }
+        return new Deadline(requireDescription(parts[0].trim(), "deadline"), parts[1].trim());
     }
 
-    /** Builds an event from an argument string of the form "description /from start /to end". */
-    private static Task parseEvent(String arguments) {
+    /** Parses "description /from start /to end". */
+    private static Task parseEvent(String arguments) throws CrackException {
         String[] parts = arguments.split(" /from ", 2);
+        if (parts.length < 2) {
+            throw new CrackException("An event needs a '/from' and a '/to', "
+                    + "like: event project meeting /from Mon 2pm /to 4pm");
+        }
         String[] period = parts[1].split(" /to ", 2);
-        return new Event(parts[0], period[0], period[1]);
+        if (period.length < 2 || period[0].isBlank() || period[1].isBlank()) {
+            throw new CrackException("An event needs a '/from' and a '/to', "
+                    + "like: event project meeting /from Mon 2pm /to 4pm");
+        }
+        return new Event(requireDescription(parts[0].trim(), "event"), period[0].trim(), period[1].trim());
     }
 
-    /** Stores the given task and confirms it to the user. */
-    private static void addTask(Task task) {
+    /** Turns a task number into an array index. */
+    private static int parseIndex(String arguments) throws CrackException {
+        if (arguments.isEmpty()) {
+            throw new CrackException("Which one tho? Gimme a task number.");
+        }
+        int position;
+        try {
+            position = Integer.parseInt(arguments);
+        } catch (NumberFormatException e) {
+            throw new CrackException("'" + arguments + "' ain't a number, gng.");
+        }
+        if (taskCount == 0) {
+            throw new CrackException("Your list is empty, ain't nothing to point at.");
+        }
+        if (position < 1 || position > taskCount) {
+            throw new CrackException("You only got " + taskCount + (taskCount == 1 ? " task" : " tasks")
+                    + ", so " + position + " ain't it.");
+        }
+        return position - 1;
+    }
+
+    /** Adds a task and says so. */
+    private static void addTask(Task task) throws CrackException {
+        if (taskCount == MAX_TASKS) {
+            throw new CrackException("List is maxed out at " + MAX_TASKS + ", can't fit no more.");
+        }
         tasks[taskCount] = task;
         taskCount++;
         System.out.println("Bet, added ts to the list:");
         System.out.println("  " + task);
-        System.out.println("You got " + taskCount + " things lined up now.");
+        System.out.println("You got " + taskCount + (taskCount == 1 ? " thing" : " things") + " lined up now.");
     }
 
-    /** Prints every stored task, numbered from 1. */
+    /** Prints the whole list. */
     private static void listTasks() {
+        if (taskCount == 0) {
+            System.out.println("Your list is empty, you free rn.");
+            return;
+        }
         System.out.println("Here's what you got on deck:");
         for (int i = 0; i < taskCount; i++) {
             System.out.println((i + 1) + "." + tasks[i]);
         }
     }
 
-    /** Marks the task at the given 1-based position as done. */
-    private static void markTask(String position) {
-        Task task = tasks[Integer.parseInt(position) - 1];
+    /** Marks a task done. */
+    private static void markTask(int index) {
+        Task task = tasks[index];
         task.markAsDone();
         System.out.println("Ayo let's go, ts is done:");
         System.out.println("  " + task);
     }
 
-    /** Marks the task at the given 1-based position as not done. */
-    private static void unmarkTask(String position) {
-        Task task = tasks[Integer.parseInt(position) - 1];
+    /** Marks a task not done. */
+    private static void unmarkTask(int index) {
+        Task task = tasks[index];
         task.markAsNotDone();
         System.out.println("Aight, ts ain't done no more:");
         System.out.println("  " + task);

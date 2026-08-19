@@ -1,6 +1,4 @@
-/**
- * A task that has to be done before a given date/time.
- */
+/** A task due by some date. */
 public class Deadline extends Task {
     private final String by;
 

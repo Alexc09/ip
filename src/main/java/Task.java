@@ -1,6 +1,4 @@
-/**
- * A single task tracked by the chatbot.
- */
+/** One task in the list. */
 public class Task {
     protected final String description;
     protected boolean isDone;
@@ -10,17 +8,17 @@ public class Task {
         this.isDone = false;
     }
 
-    /** Marks this task as completed. */
+    /** Marks it done. */
     public void markAsDone() {
         this.isDone = true;
     }
 
-    /** Marks this task as not completed. */
+    /** Marks it not done. */
     public void markAsNotDone() {
         this.isDone = false;
     }
 
-    /** Returns "X" if this task is done, and a blank otherwise. */
+    /** "X" when done, blank otherwise. */
     private String getStatusIcon() {
         return isDone ? "X" : " ";
     }

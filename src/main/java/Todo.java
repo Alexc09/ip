@@ -1,6 +1,4 @@
-/**
- * A task with no date or time attached to it.
- */
+/** A task with no date attached. */
 public class Todo extends Task {
     public Todo(String description) {
         super(description);
