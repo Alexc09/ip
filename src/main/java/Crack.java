@@ -40,37 +40,23 @@ public class Crack {
     /** Runs one command. Returns false when it's time to stop. */
     private static boolean handle(String input) throws CrackException {
         String[] parts = input.split(" ", 2);
-        String command = parts[0];
+        Command command = Command.fromKeyword(parts[0]);
         String arguments = parts.length > 1 ? parts[1].trim() : "";
 
         switch (command) {
-        case "bye":
+        case BYE -> {
             System.out.println("Aight bet, I'm finna fade.");
             return false;
-        case "list":
-            listTasks();
-            return true;
-        case "mark":
-            markTask(parseIndex(arguments));
-            return true;
-        case "unmark":
-            unmarkTask(parseIndex(arguments));
-            return true;
-        case "delete":
-            deleteTask(parseIndex(arguments));
-            return true;
-        case "todo":
-            addTask(new Todo(requireDescription(arguments, "todo")));
-            return true;
-        case "deadline":
-            addTask(parseDeadline(arguments));
-            return true;
-        case "event":
-            addTask(parseEvent(arguments));
-            return true;
-        default:
-            throw new CrackException("Nah bro, I got no clue what ts means.");
         }
+        case LIST -> listTasks();
+        case MARK -> markTask(parseIndex(arguments));
+        case UNMARK -> unmarkTask(parseIndex(arguments));
+        case DELETE -> deleteTask(parseIndex(arguments));
+        case TODO -> addTask(new Todo(requireDescription(arguments, "todo")));
+        case DEADLINE -> addTask(parseDeadline(arguments));
+        case EVENT -> addTask(parseEvent(arguments));
+        }
+        return true;
     }
 
     /** Rejects a blank description. */
