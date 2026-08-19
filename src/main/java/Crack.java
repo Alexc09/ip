@@ -40,18 +40,39 @@ public class Crack {
                 markTask(input.substring("mark ".length()));
             } else if (input.startsWith("unmark ")) {
                 unmarkTask(input.substring("unmark ".length()));
+            } else if (input.startsWith("todo ")) {
+                addTask(new Todo(input.substring("todo ".length())));
+            } else if (input.startsWith("deadline ")) {
+                addTask(parseDeadline(input.substring("deadline ".length())));
+            } else if (input.startsWith("event ")) {
+                addTask(parseEvent(input.substring("event ".length())));
             } else {
-                addTask(input);
+                System.out.println("Nah bro, I got no clue what ts means.");
             }
             System.out.println(DIVIDER);
         }
     }
 
-    /** Stores a new task with the given description and confirms it to the user. */
-    private static void addTask(String description) {
-        tasks[taskCount] = new Task(description);
+    /** Builds a deadline from an argument string of the form "description /by when". */
+    private static Task parseDeadline(String arguments) {
+        String[] parts = arguments.split(" /by ", 2);
+        return new Deadline(parts[0], parts[1]);
+    }
+
+    /** Builds an event from an argument string of the form "description /from start /to end". */
+    private static Task parseEvent(String arguments) {
+        String[] parts = arguments.split(" /from ", 2);
+        String[] period = parts[1].split(" /to ", 2);
+        return new Event(parts[0], period[0], period[1]);
+    }
+
+    /** Stores the given task and confirms it to the user. */
+    private static void addTask(Task task) {
+        tasks[taskCount] = task;
         taskCount++;
-        System.out.println("bet, added: " + description);
+        System.out.println("Bet, added ts to the list:");
+        System.out.println("  " + task);
+        System.out.println("You got " + taskCount + " things lined up now.");
     }
 
     /** Prints every stored task, numbered from 1. */
