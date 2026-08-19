@@ -16,7 +16,7 @@ public class Crack {
             + "| |___| | | (_| | (__|   < \n"
             + " \\____|_|  \\__,_|\\___|_|\\_\\";
 
-    private static final String[] tasks = new String[MAX_TASKS];
+    private static final Task[] tasks = new Task[MAX_TASKS];
     private static int taskCount = 0;
 
     public static void main(String[] args) {
@@ -36,6 +36,10 @@ public class Crack {
                 break;
             } else if (input.equals("list")) {
                 listTasks();
+            } else if (input.startsWith("mark ")) {
+                markTask(input.substring("mark ".length()));
+            } else if (input.startsWith("unmark ")) {
+                unmarkTask(input.substring("unmark ".length()));
             } else {
                 addTask(input);
             }
@@ -43,17 +47,34 @@ public class Crack {
         }
     }
 
-    /** Stores the given task and confirms it to the user. */
-    private static void addTask(String task) {
-        tasks[taskCount] = task;
+    /** Stores a new task with the given description and confirms it to the user. */
+    private static void addTask(String description) {
+        tasks[taskCount] = new Task(description);
         taskCount++;
-        System.out.println("bet, added: " + task);
+        System.out.println("bet, added: " + description);
     }
 
     /** Prints every stored task, numbered from 1. */
     private static void listTasks() {
+        System.out.println("Here's what you got on deck:");
         for (int i = 0; i < taskCount; i++) {
-            System.out.println((i + 1) + ". " + tasks[i]);
+            System.out.println((i + 1) + "." + tasks[i]);
         }
+    }
+
+    /** Marks the task at the given 1-based position as done. */
+    private static void markTask(String position) {
+        Task task = tasks[Integer.parseInt(position) - 1];
+        task.markAsDone();
+        System.out.println("Ayo let's go, ts is done:");
+        System.out.println("  " + task);
+    }
+
+    /** Marks the task at the given 1-based position as not done. */
+    private static void unmarkTask(String position) {
+        Task task = tasks[Integer.parseInt(position) - 1];
+        task.markAsNotDone();
+        System.out.println("Aight, ts ain't done no more:");
+        System.out.println("  " + task);
     }
 }
