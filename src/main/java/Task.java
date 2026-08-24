@@ -18,6 +18,11 @@ public class Task {
         this.isDone = false;
     }
 
+    /** How this task looks in the save file. */
+    public String toSaveFormat() {
+        return (isDone ? "1" : "0") + " | " + description;
+    }
+
     /** "X" when done, blank otherwise. */
     private String getStatusIcon() {
         return isDone ? "X" : " ";

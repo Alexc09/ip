@@ -17,6 +17,8 @@ public class Crack {
     private static final ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
+        tasks.addAll(Storage.load());
+
         System.out.println(DIVIDER);
         System.out.println(BANNER);
         System.out.println("Yo! Crack pulled up.");
@@ -115,6 +117,7 @@ public class Crack {
     /** Adds a task and says so. */
     private static void addTask(Task task) {
         tasks.add(task);
+        Storage.save(tasks);
         System.out.println("Bet, added ts to the list:");
         System.out.println("  " + task);
         printCount();
@@ -123,6 +126,7 @@ public class Crack {
     /** Drops a task off the list. */
     private static void deleteTask(int index) {
         Task task = tasks.remove(index);
+        Storage.save(tasks);
         System.out.println("Aight, yeeted ts off the list:");
         System.out.println("  " + task);
         printCount();
@@ -150,6 +154,7 @@ public class Crack {
     private static void markTask(int index) {
         Task task = tasks.get(index);
         task.markAsDone();
+        Storage.save(tasks);
         System.out.println("Ayo let's go, ts is done:");
         System.out.println("  " + task);
     }
@@ -158,6 +163,7 @@ public class Crack {
     private static void unmarkTask(int index) {
         Task task = tasks.get(index);
         task.markAsNotDone();
+        Storage.save(tasks);
         System.out.println("Aight, ts ain't done no more:");
         System.out.println("  " + task);
     }
