@@ -6,14 +6,18 @@ import java.util.Scanner;
 
 /** Keeps the task list on disk between runs. */
 public class Storage {
-    private static final String FILE_PATH = "./data/data.txt";
+    private final String filePath;
+
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
 
     /** Loads the saved tasks, or an empty list if there's nothing saved yet. */
-    public static ArrayList<Task> load() {
+    public TaskList load() throws CrackException {
         ArrayList<Task> tasks = new ArrayList<>();
-        File file = new File(FILE_PATH);
+        File file = new File(filePath);
         if (!file.exists()) {
-            return tasks;
+            return new TaskList(tasks);
         }
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
@@ -23,21 +27,21 @@ public class Storage {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Couldn't read your saved list, starting fresh.");
+            throw new CrackException("Couldn't read your saved list, starting fresh.");
         }
-        return tasks;
+        return new TaskList(tasks);
     }
 
     /** Writes the whole list out, replacing whatever was saved before. */
-    public static void save(ArrayList<Task> tasks) {
-        File file = new File(FILE_PATH);
+    public void save(TaskList tasks) throws CrackException {
+        File file = new File(filePath);
         file.getParentFile().mkdirs();
         try (FileWriter writer = new FileWriter(file)) {
-            for (Task task : tasks) {
+            for (Task task : tasks.asArrayList()) {
                 writer.write(task.toSaveFormat() + System.lineSeparator());
             }
         } catch (IOException e) {
-            System.out.println("Couldn't save your list, gng.");
+            throw new CrackException("Couldn't save your list, gng.");
         }
     }
 
