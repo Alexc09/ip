@@ -1,3 +1,6 @@
+package crack;
+
+import crack.task.Task;
 import java.time.LocalDate;
 import java.util.ArrayList;
 

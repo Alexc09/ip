@@ -1,3 +1,6 @@
+package crack.task;
+
+import crack.CrackException;
 import java.time.LocalDate;
 
 /** A task that runs from one date to another. */

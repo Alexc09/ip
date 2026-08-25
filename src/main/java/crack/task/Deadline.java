@@ -1,3 +1,6 @@
+package crack.task;
+
+import crack.CrackException;
 import java.time.LocalDate;
 
 /** A task due by some date, and maybe a time of day too. */

@@ -1,3 +1,8 @@
+package crack;
+
+import crack.task.Task;
+import crack.task.TaskDate;
+
 /**
  * Entry point of the Crack chatbot.
  */

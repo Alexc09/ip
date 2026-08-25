@@ -1,3 +1,7 @@
+package crack.task;
+
+import crack.CrackException;
+
 /** A task with no date attached. */
 public class Todo extends Task {
     public Todo(String description) {

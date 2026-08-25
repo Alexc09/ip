@@ -1,3 +1,9 @@
+package crack;
+
+import crack.task.Deadline;
+import crack.task.Event;
+import crack.task.Task;
+import crack.task.Todo;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

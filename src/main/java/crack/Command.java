@@ -1,3 +1,5 @@
+package crack;
+
 /** The commands Crack knows. */
 public enum Command {
     BYE("bye"),

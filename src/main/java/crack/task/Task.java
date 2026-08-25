@@ -1,3 +1,6 @@
+package crack.task;
+
+import crack.CrackException;
 import java.time.LocalDate;
 
 /** One task in the list. */

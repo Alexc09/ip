@@ -1,3 +1,11 @@
+package crack;
+
+import crack.task.Deadline;
+import crack.task.Event;
+import crack.task.Task;
+import crack.task.TaskDate;
+import crack.task.Todo;
+
 /** Makes sense of what the user typed. */
 public class Parser {
     /** One line of input, split into the command word and everything after it. */
