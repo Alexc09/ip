@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 /** One task in the list. */
 public class Task {
     protected final String description;
@@ -16,6 +18,11 @@ public class Task {
     /** Marks it not done. */
     public void markAsNotDone() {
         this.isDone = false;
+    }
+
+    /** Whether this task lands on the given day. Only dated tasks ever do. */
+    public boolean isOn(LocalDate date) {
+        return false;
     }
 
     /** How this task looks in the save file. */

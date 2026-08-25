@@ -16,3 +16,15 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
 2. After that, locate the `src/main/java/Crack.java` file, right-click it, and choose `Run Crack.main()` (if the code editor is showing compile errors, try restarting the IDE)
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+
+## Commands
+- list - print all tasks
+- todo <description> - add an undated task
+- deadline <description> /by <date> - add a task with deadline
+- event <description> /from <date> /to <date> - add a task spanning two dates
+- on <date> - list deadlines due that day and events happening on that day
+- mark <number> - mark a task done
+- unmark <number> - mark a task as not done
+- delete <number> - remove a task
+- bye - exit

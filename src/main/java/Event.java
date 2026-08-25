@@ -1,17 +1,29 @@
-/** A task that runs from one time to another. */
-public class Event extends Task {
-    private final String from;
-    private final String to;
+import java.time.LocalDate;
 
-    public Event(String description, String from, String to) {
+/** A task that runs from one date to another. */
+public class Event extends Task {
+    private final TaskDate from;
+    private final TaskDate to;
+
+    private Event(String description, TaskDate from, TaskDate to) {
         super(description);
         this.from = from;
         this.to = to;
     }
 
+    /** Builds an event from dates written in any of the formats we accept. */
+    public static Event of(String description, String from, String to) throws CrackException {
+        return new Event(description, TaskDate.parse(from), TaskDate.parse(to));
+    }
+
+    @Override
+    public boolean isOn(LocalDate date) {
+        return !date.isBefore(from.toLocalDate()) && !date.isAfter(to.toLocalDate());
+    }
+
     @Override
     public String toSaveFormat() {
-        return "E | " + super.toSaveFormat() + " | " + from + " | " + to;
+        return "E | " + super.toSaveFormat() + " | " + from.toSaveFormat() + " | " + to.toSaveFormat();
     }
 
     @Override

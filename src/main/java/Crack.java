@@ -57,6 +57,7 @@ public class Crack {
         case TODO -> addTask(new Todo(requireDescription(arguments, "todo")));
         case DEADLINE -> addTask(parseDeadline(arguments));
         case EVENT -> addTask(parseEvent(arguments));
+        case ON -> listOn(arguments);
         }
         return true;
     }
@@ -75,7 +76,7 @@ public class Crack {
         if (parts.length < 2 || parts[1].isBlank()) {
             throw new CrackException("A deadline needs a '/by', like: deadline return book /by Sunday");
         }
-        return new Deadline(requireDescription(parts[0].trim(), "deadline"), parts[1].trim());
+        return Deadline.of(requireDescription(parts[0].trim(), "deadline"), parts[1].trim());
     }
 
     /** Parses "description /from start /to end". */
@@ -83,14 +84,14 @@ public class Crack {
         String[] parts = arguments.split(" /from ", 2);
         if (parts.length < 2) {
             throw new CrackException("An event needs a '/from' and a '/to', "
-                    + "like: event project meeting /from Mon 2pm /to 4pm");
+                    + "like: event project meeting /from 2/12/2020 1400 /to 2/12/2020 1600");
         }
         String[] period = parts[1].split(" /to ", 2);
         if (period.length < 2 || period[0].isBlank() || period[1].isBlank()) {
             throw new CrackException("An event needs a '/from' and a '/to', "
-                    + "like: event project meeting /from Mon 2pm /to 4pm");
+                    + "like: event project meeting /from 2/12/2020 1400 /to 2/12/2020 1600");
         }
-        return new Event(requireDescription(parts[0].trim(), "event"), period[0].trim(), period[1].trim());
+        return Event.of(requireDescription(parts[0].trim(), "event"), period[0].trim(), period[1].trim());
     }
 
     /** Turns a task number into an array index. */
@@ -136,6 +137,28 @@ public class Crack {
     private static void printCount() {
         int count = tasks.size();
         System.out.println("You got " + count + (count == 1 ? " thing" : " things") + " lined up now.");
+    }
+
+    /** Prints everything landing on one day. */
+    private static void listOn(String arguments) throws CrackException {
+        if (arguments.isEmpty()) {
+            throw new CrackException("On what day tho? Try: on 2/12/2020");
+        }
+        TaskDate date = TaskDate.parse(arguments);
+        ArrayList<Task> matches = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.isOn(date.toLocalDate())) {
+                matches.add(task);
+            }
+        }
+        if (matches.isEmpty()) {
+            System.out.println("Nothing on " + date.dayDisplay() + ", you free that day.");
+            return;
+        }
+        System.out.println("Here's what you got on " + date.dayDisplay() + ":");
+        for (Task task : matches) {
+            System.out.println("  " + task);
+        }
     }
 
     /** Prints the whole list. */
