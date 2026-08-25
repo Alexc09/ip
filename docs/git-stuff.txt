@@ -1,0 +1,14 @@
+Level 8
+```bash
+git checkout -b branch-Level-8
+<<<Make changes>>>
+git add .
+git commit -m "feat: add datetime understanding"
+git switch master
+git merge --no-ff branch-Level-8 -m "feat: merge L8 to master"  # merge branch to master... use --no-ff so it still creates a merge commit. If git fast-forwarded (dest branch didn't change), no merge commit is created
+git tag Level-8
+
+git push                            # Push the master branch to remote (we set master as upstream so we don't have to specify master)
+git push origin branch-Level-8      # Push the branch-Level-8 branch to remote
+git push remote Level-8             # Push the Level-8 tag to remote
+```
