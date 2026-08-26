@@ -6,13 +6,26 @@ import crack.task.Task;
 import crack.task.TaskDate;
 import crack.task.Todo;
 
-/** Makes sense of what the user typed. */
+/**
+ * Makes sense of what the user typed, turning raw lines into commands and tasks.
+ */
 public class Parser {
-    /** One line of input, split into the command word and everything after it. */
+    /**
+     * One line of input, split into the command word and everything after it.
+     *
+     * @param command The command the user asked for.
+     * @param arguments The rest of the line, trimmed, or blank if there was none.
+     */
     public record Parsed(Command command, String arguments) {
     }
 
-    /** Splits a line into its command and arguments. */
+    /**
+     * Splits a line of input into its command and its arguments.
+     *
+     * @param input The whole line the user typed.
+     * @return The command, paired with whatever followed it.
+     * @throws CrackException If the first word is not a command we know.
+     */
     public static Parsed parse(String input) throws CrackException {
         String[] parts = input.split(" ", 2);
         Command command = Command.fromKeyword(parts[0]);
@@ -20,12 +33,24 @@ public class Parser {
         return new Parsed(command, arguments);
     }
 
-    /** Builds a todo from "description". */
+    /**
+     * Builds a todo from a plain description.
+     *
+     * @param arguments The description the user typed.
+     * @return The new todo.
+     * @throws CrackException If the description is blank.
+     */
     public static Task parseTodo(String arguments) throws CrackException {
         return new Todo(requireDescription(arguments, "todo"));
     }
 
-    /** Builds a deadline from "description /by when". */
+    /**
+     * Builds a deadline from "description /by when".
+     *
+     * @param arguments Everything the user typed after the command word.
+     * @return The new deadline.
+     * @throws CrackException If the "/by" is missing, or either half is unusable.
+     */
     public static Task parseDeadline(String arguments) throws CrackException {
         String[] parts = arguments.split(" /by ", 2);
         if (parts.length < 2 || parts[1].isBlank()) {
@@ -34,7 +59,13 @@ public class Parser {
         return Deadline.of(requireDescription(parts[0].trim(), "deadline"), parts[1].trim());
     }
 
-    /** Builds an event from "description /from start /to end". */
+    /**
+     * Builds an event from "description /from start /to end".
+     *
+     * @param arguments Everything the user typed after the command word.
+     * @return The new event.
+     * @throws CrackException If "/from" or "/to" is missing, or any part is unusable.
+     */
     public static Task parseEvent(String arguments) throws CrackException {
         String[] parts = arguments.split(" /from ", 2);
         if (parts.length < 2) {
@@ -47,7 +78,14 @@ public class Parser {
         return Event.of(requireDescription(parts[0].trim(), "event"), period[0].trim(), period[1].trim());
     }
 
-    /** Turns a task number into a list index, checking it points at something. */
+    /**
+     * Turns a task number the user typed into a list index.
+     *
+     * @param arguments The number as typed, counting from one.
+     * @param listSize How many tasks there are to point at.
+     * @return The matching zero based index.
+     * @throws CrackException If it is blank, not a number, or points outside the list.
+     */
     public static int parseIndex(String arguments, int listSize) throws CrackException {
         if (arguments.isEmpty()) {
             throw new CrackException("Which one tho? Gimme a task number.");
@@ -68,7 +106,13 @@ public class Parser {
         return position - 1;
     }
 
-    /** Reads the day the user asked about. */
+    /**
+     * Reads the day the user asked about.
+     *
+     * @param arguments The date as the user typed it.
+     * @return The day they meant.
+     * @throws CrackException If no date was given, or it cannot be read.
+     */
     public static TaskDate parseDate(String arguments) throws CrackException {
         if (arguments.isEmpty()) {
             throw new CrackException("On what day tho? Try: on 2/12/2020");
@@ -79,7 +123,14 @@ public class Parser {
     private static final String EVENT_FORMAT_HINT = "An event needs a '/from' and a '/to', "
             + "like: event project meeting /from 2/12/2020 1400 /to 2/12/2020 1600";
 
-    /** Rejects a blank description. */
+    /**
+     * Returns the description unchanged, as long as the user actually gave one.
+     *
+     * @param description The description as typed.
+     * @param taskType The kind of task, used to word the complaint.
+     * @return The same description.
+     * @throws CrackException If the description is blank.
+     */
     private static String requireDescription(String description, String taskType) throws CrackException {
         if (description.isEmpty()) {
             throw new CrackException("Nah gng, a " + taskType + " needs an actual description.");

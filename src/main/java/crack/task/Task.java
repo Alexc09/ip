@@ -3,37 +3,62 @@ package crack.task;
 import crack.CrackException;
 import java.time.LocalDate;
 
-/** One task in the list. */
+/**
+ * A single thing the user wants to get done.
+ * Holds a description and whether it is finished. Subclasses add any dates.
+ */
 public class Task {
+    /** What the user wants to get done. */
     protected final String description;
+
+    /** Whether the task has been finished. */
     protected boolean isDone;
 
+    /**
+     * Creates a task that starts off not done.
+     *
+     * @param description What the user wants to get done.
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
     }
 
-    /** Marks it done. */
+    /**
+     * Marks this task as done.
+     */
     public void markAsDone() {
         this.isDone = true;
     }
 
-    /** Marks it not done. */
+    /**
+     * Marks this task as not done.
+     */
     public void markAsNotDone() {
         this.isDone = false;
     }
 
-    /** Whether this task lands on the given day. Only dated tasks ever do. */
+    /**
+     * Returns whether this task lands on the given day.
+     * A plain task carries no date, so it never does.
+     *
+     * @param date The day being asked about.
+     * @return True if this task falls on that day.
+     */
     public boolean isOn(LocalDate date) {
         return false;
     }
 
-    /** How this task looks in the save file. */
+    /**
+     * Returns this task written the way the save file stores it.
+     */
     public String toSaveFormat() {
         return (isDone ? "1" : "0") + " | " + description;
     }
 
-    /** "X" when done, blank otherwise. */
+    /**
+     * Returns "X" when the task is done and a blank otherwise.
+     */
     private String getStatusIcon() {
         return isDone ? "X" : " ";
     }

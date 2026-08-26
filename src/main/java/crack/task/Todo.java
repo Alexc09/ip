@@ -2,8 +2,15 @@ package crack.task;
 
 import crack.CrackException;
 
-/** A task with no date attached. */
+/**
+ * A task with no date attached to it.
+ */
 public class Todo extends Task {
+    /**
+     * Creates a todo.
+     *
+     * @param description What the user wants to get done.
+     */
     public Todo(String description) {
         super(description);
     }

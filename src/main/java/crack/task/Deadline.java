@@ -3,7 +3,9 @@ package crack.task;
 import crack.CrackException;
 import java.time.LocalDate;
 
-/** A task due by some date, and maybe a time of day too. */
+/**
+ * A task that has to be done by a certain date, and maybe by a certain time.
+ */
 public class Deadline extends Task {
     private final TaskDate by;
 
@@ -12,11 +14,24 @@ public class Deadline extends Task {
         this.by = by;
     }
 
-    /** Builds a deadline from a date written in any of the formats we accept. */
+    /**
+     * Creates a deadline from a date written in any of the formats we accept.
+     *
+     * @param description What the user wants to get done.
+     * @param by When it is due, as the user typed it.
+     * @return The new deadline.
+     * @throws CrackException If the date cannot be read.
+     */
     public static Deadline of(String description, String by) throws CrackException {
         return new Deadline(description, TaskDate.parse(by));
     }
 
+    /**
+     * Returns whether this deadline falls due on the given day.
+     *
+     * @param date The day being asked about.
+     * @return True if it is due that day.
+     */
     @Override
     public boolean isOn(LocalDate date) {
         return by.toLocalDate().equals(date);

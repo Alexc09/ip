@@ -5,6 +5,7 @@ import crack.task.TaskDate;
 
 /**
  * Entry point of the Crack chatbot.
+ * Wires up the user interface, the save file and the task list, then runs the command loop.
  */
 public class Crack {
     private static final String SAVE_PATH = "./data/data.txt";
@@ -13,18 +14,29 @@ public class Crack {
     private final Storage storage;
     private final TaskList tasks;
 
-    /** Wires up the chatbot against the given save file. */
+    /**
+     * Wires up the chatbot against the given save file and loads whatever is in it.
+     *
+     * @param filePath Where the save file lives.
+     */
     public Crack(String filePath) {
         this.ui = new Ui();
         this.storage = new Storage(filePath);
         this.tasks = loadTasks();
     }
 
+    /**
+     * Starts the chatbot.
+     *
+     * @param args Command line arguments, which Crack ignores.
+     */
     public static void main(String[] args) {
         new Crack(SAVE_PATH).run();
     }
 
-    /** Greets the user, then handles commands until they say bye. */
+    /**
+     * Greets the user, then handles commands until they say bye.
+     */
     public void run() {
         ui.showWelcome();
         boolean isRunning = true;
@@ -40,7 +52,13 @@ public class Crack {
         }
     }
 
-    /** Runs one command. Returns false when it's time to stop. */
+    /**
+     * Runs one command.
+     *
+     * @param input The whole line the user typed.
+     * @return False once the user has said bye, true otherwise.
+     * @throws CrackException If the command cannot be understood or carried out.
+     */
     private boolean handle(String input) throws CrackException {
         Parser.Parsed parsed = Parser.parse(input);
         String arguments = parsed.arguments();
@@ -62,7 +80,11 @@ public class Crack {
         return true;
     }
 
-    /** Loads the saved tasks, falling back to an empty list if the file won't read. */
+    /**
+     * Loads the saved tasks, falling back to an empty list if the file will not read.
+     *
+     * @return The tasks to start the session with.
+     */
     private TaskList loadTasks() {
         try {
             return storage.load();
@@ -72,7 +94,9 @@ public class Crack {
         }
     }
 
-    /** Writes the list out, grumbling if it can't. */
+    /**
+     * Writes the list out, grumbling to the user if it cannot.
+     */
     private void save() {
         try {
             storage.save(tasks);
@@ -81,21 +105,33 @@ public class Crack {
         }
     }
 
-    /** Adds a task and says so. */
+    /**
+     * Adds a task and confirms it.
+     *
+     * @param task The task to add.
+     */
     private void addTask(Task task) {
         tasks.add(task);
         save();
         ui.showAdded(task, tasks.size());
     }
 
-    /** Drops a task off the list. */
+    /**
+     * Drops a task off the list and confirms it.
+     *
+     * @param index Zero based position of the task to remove.
+     */
     private void deleteTask(int index) {
         Task task = tasks.remove(index);
         save();
         ui.showRemoved(task, tasks.size());
     }
 
-    /** Marks a task done. */
+    /**
+     * Marks a task done and confirms it.
+     *
+     * @param index Zero based position of the task to mark.
+     */
     private void markTask(int index) {
         Task task = tasks.get(index);
         task.markAsDone();
@@ -103,7 +139,11 @@ public class Crack {
         ui.showMarked(task);
     }
 
-    /** Marks a task not done. */
+    /**
+     * Marks a task not done and confirms it.
+     *
+     * @param index Zero based position of the task to unmark.
+     */
     private void unmarkTask(int index) {
         Task task = tasks.get(index);
         task.markAsNotDone();
@@ -111,7 +151,11 @@ public class Crack {
         ui.showUnmarked(task);
     }
 
-    /** Prints everything landing on one day. */
+    /**
+     * Prints everything landing on one day.
+     *
+     * @param date The day the user asked about.
+     */
     private void listOn(TaskDate date) {
         ui.showTasksOn(date.dayDisplay(), tasks.onDate(date.toLocalDate()));
     }

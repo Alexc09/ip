@@ -3,7 +3,9 @@ package crack.task;
 import crack.CrackException;
 import java.time.LocalDate;
 
-/** A task that runs from one date to another. */
+/**
+ * A task that runs from one date to another.
+ */
 public class Event extends Task {
     private final TaskDate from;
     private final TaskDate to;
@@ -14,11 +16,26 @@ public class Event extends Task {
         this.to = to;
     }
 
-    /** Builds an event from dates written in any of the formats we accept. */
+    /**
+     * Creates an event from dates written in any of the formats we accept.
+     *
+     * @param description What the event is.
+     * @param from When it starts, as the user typed it.
+     * @param to When it ends, as the user typed it.
+     * @return The new event.
+     * @throws CrackException If either date cannot be read.
+     */
     public static Event of(String description, String from, String to) throws CrackException {
         return new Event(description, TaskDate.parse(from), TaskDate.parse(to));
     }
 
+    /**
+     * Returns whether this event is running on the given day.
+     * Both the first and last day count, so a long event matches every day it covers.
+     *
+     * @param date The day being asked about.
+     * @return True if the event spans that day.
+     */
     @Override
     public boolean isOn(LocalDate date) {
         return !date.isBefore(from.toLocalDate()) && !date.isAfter(to.toLocalDate());

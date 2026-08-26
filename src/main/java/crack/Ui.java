@@ -4,7 +4,10 @@ import crack.task.Task;
 import java.util.List;
 import java.util.Scanner;
 
-/** Everything Crack says to the user, and how it hears back. */
+/**
+ * Everything Crack says to the user, and how it hears back.
+ * Keeping the wording in one place means the rest of the code never prints anything itself.
+ */
 public class Ui {
     /** Line drawn between messages. */
     private static final String DIVIDER = "_".repeat(60);
@@ -17,7 +20,9 @@ public class Ui {
 
     private final Scanner scanner = new Scanner(System.in);
 
-    /** Greets the user. */
+    /**
+     * Greets the user.
+     */
     public void showWelcome() {
         System.out.println(DIVIDER);
         System.out.println(BANNER);
@@ -26,58 +31,92 @@ public class Ui {
         System.out.println(DIVIDER);
     }
 
-    /** Whether there's another line of input waiting. */
+    /**
+     * Returns whether there is another line of input waiting.
+     */
     public boolean hasNextCommand() {
         return scanner.hasNextLine();
     }
 
-    /** Reads one line of input. */
+    /**
+     * Reads one line of input, trimmed.
+     */
     public String readCommand() {
         return scanner.nextLine().trim();
     }
 
-    /** Draws the line between messages. */
+    /**
+     * Draws the line that separates one message from the next.
+     */
     public void showLine() {
         System.out.println(DIVIDER);
     }
 
-    /** Says why something didn't work. */
+    /**
+     * Tells the user why something did not work.
+     *
+     * @param message What went wrong.
+     */
     public void showError(String message) {
         System.out.println(message);
     }
 
-    /** Signs off. */
+    /**
+     * Signs off.
+     */
     public void showGoodbye() {
         System.out.println("Aight bet, I'm finna fade.");
     }
 
-    /** Confirms a new task. */
+    /**
+     * Confirms that a task was added.
+     *
+     * @param task The task that went in.
+     * @param count How many tasks there are now.
+     */
     public void showAdded(Task task, int count) {
         System.out.println("Bet, added ts to the list:");
         System.out.println("  " + task);
         showCount(count);
     }
 
-    /** Confirms a task is gone. */
+    /**
+     * Confirms that a task was removed.
+     *
+     * @param task The task that was dropped.
+     * @param count How many tasks are left.
+     */
     public void showRemoved(Task task, int count) {
         System.out.println("Aight, yeeted ts off the list:");
         System.out.println("  " + task);
         showCount(count);
     }
 
-    /** Confirms a task is done. */
+    /**
+     * Confirms that a task is now done.
+     *
+     * @param task The task that was marked.
+     */
     public void showMarked(Task task) {
         System.out.println("Ayo let's go, ts is done:");
         System.out.println("  " + task);
     }
 
-    /** Confirms a task is back on the pile. */
+    /**
+     * Confirms that a task is back on the pile.
+     *
+     * @param task The task that was unmarked.
+     */
     public void showUnmarked(Task task) {
         System.out.println("Aight, ts ain't done no more:");
         System.out.println("  " + task);
     }
 
-    /** Prints the whole list, numbered. */
+    /**
+     * Prints the whole list, numbered from one.
+     *
+     * @param tasks The list to print.
+     */
     public void showList(TaskList tasks) {
         if (tasks.isEmpty()) {
             System.out.println("Your list is empty, you free rn.");
@@ -89,7 +128,12 @@ public class Ui {
         }
     }
 
-    /** Prints whatever lands on one day. */
+    /**
+     * Prints whatever lands on one day.
+     *
+     * @param day The day being asked about, already written out for display.
+     * @param matches The tasks falling on that day, possibly none.
+     */
     public void showTasksOn(String day, List<Task> matches) {
         if (matches.isEmpty()) {
             System.out.println("Nothing on " + day + ", you free that day.");
@@ -101,7 +145,11 @@ public class Ui {
         }
     }
 
-    /** Says how many tasks are left. */
+    /**
+     * Says how many tasks are left.
+     *
+     * @param count The number of tasks in the list.
+     */
     private void showCount(int count) {
         System.out.println("You got " + count + (count == 1 ? " thing" : " things") + " lined up now.");
     }
