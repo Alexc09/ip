@@ -13,10 +13,28 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    1. If there are any further prompts, accept the defaults.
 1. Configure the project to use **JDK 25** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
    In the same dialog, set the **Project language level** field to the `SDK default` option.
-2. After that, locate the `src/main/java/Crack.java` file, right-click it, and choose `Run Crack.main()` (if the code editor is showing compile errors, try restarting the IDE)
+2. After that, locate the `src/main/java/crack/Crack.java` file, right-click it, and choose `Run Crack.main()` (if the code editor is showing compile errors, try restarting the IDE)
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
 
+
+## Building and running
+
+Prerequisites: JDK 25. Gradle comes with the wrapper, so there's nothing else to install.
+
+```
+./gradlew run          # run the app
+./gradlew test         # run the tests
+./gradlew shadowJar    # build a runnable jar at build/libs/crack.jar
+```
+
+To run the jar on its own:
+
+```
+java -jar crack.jar
+```
+
+Tasks are saved to `data/data.txt`, relative to wherever you run it from.
 
 ## Commands
 - list - print all tasks
