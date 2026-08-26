@@ -4,47 +4,85 @@ import crack.task.Task;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-/** The tasks Crack is keeping track of. */
+/**
+ * The tasks Crack is keeping track of, in the order the user added them.
+ */
 public class TaskList {
     private final ArrayList<Task> tasks;
 
-    /** Starts an empty list. */
+    /**
+     * Creates an empty list.
+     */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
 
-    /** Starts from tasks that were already loaded. */
+    /**
+     * Creates a list holding tasks that were already loaded from disk.
+     *
+     * @param tasks The tasks to start with.
+     */
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
 
+    /**
+     * Adds a task to the end of the list.
+     *
+     * @param task The task to add.
+     */
     public void add(Task task) {
         tasks.add(task);
     }
 
-    /** Removes the task at the given index and hands it back. */
+    /**
+     * Removes the task at the given index and returns it.
+     *
+     * @param index Zero based position in the list.
+     * @return The task that was removed.
+     */
     public Task remove(int index) {
         return tasks.remove(index);
     }
 
+    /**
+     * Returns the task at the given index.
+     *
+     * @param index Zero based position in the list.
+     * @return The task sitting there.
+     */
     public Task get(int index) {
         return tasks.get(index);
     }
 
+    /**
+     * Returns how many tasks are in the list.
+     */
     public int size() {
         return tasks.size();
     }
 
+    /**
+     * Returns whether the list has nothing in it.
+     */
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
 
-    /** Every task, in order. */
+    /**
+     * Returns every task, in order.
+     */
     public ArrayList<Task> asArrayList() {
         return tasks;
     }
 
-    /** Just the tasks landing on the given day. */
+    /**
+     * Returns only the tasks landing on the given day.
+     * Deadlines match the day they are due, and events match every day they span.
+     *
+     * @param date The day being asked about.
+     * @return The matching tasks, in list order.
+     */
     public ArrayList<Task> onDate(LocalDate date) {
         ArrayList<Task> matches = new ArrayList<>();
         for (Task task : tasks) {

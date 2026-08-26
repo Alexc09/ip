@@ -6,7 +6,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-/** A date, plus a time of day if the user gave one. */
+/**
+ * A date the user typed, along with a time of day if they gave one.
+ * Accepts either slashes or dashes, and either day-first or year-first order.
+ */
 public class TaskDate {
     /** Date-and-time shapes we accept from the user, e.g. 2/12/2020 1500. */
     private static final String[] DATE_TIME_FORMATS = {"yyyy-MM-dd HHmm", "d-M-yyyy HHmm"};
@@ -26,7 +29,14 @@ public class TaskDate {
         this.hasTime = hasTime;
     }
 
-    /** Reads a date written in any of the formats we accept. */
+    /**
+     * Reads a date written in any of the formats we accept.
+     * Slashes and dashes mean the same thing, and the time of day is optional.
+     *
+     * @param input The date as the user typed it.
+     * @return The date, remembering whether a time came with it.
+     * @throws CrackException If the text does not match any format we know.
+     */
     public static TaskDate parse(String input) throws CrackException {
         // Slashes and dashes are the same to us, so we only match against dashes below.
         String cleaned = input.replace('/', '-');
@@ -48,17 +58,24 @@ public class TaskDate {
         throw new CrackException("'" + input + "' ain't a date I get. Try 2/12/2020 1500 or 2019-10-15.");
     }
 
-    /** The day this lands on, ignoring any time. */
+    /**
+     * Returns the day this lands on, ignoring any time of day.
+     */
     public LocalDate toLocalDate() {
         return at.toLocalDate();
     }
 
-    /** Just the day, written out for display. */
+    /**
+     * Returns just the day, written out for display and never showing a time.
+     */
     public String dayDisplay() {
         return at.format(DATE_DISPLAY);
     }
 
-    /** How this looks in the save file. */
+    /**
+     * Returns this date written the way the save file stores it.
+     * The time is included only when the user gave one.
+     */
     public String toSaveFormat() {
         return hasTime ? at.format(SAVE_FORMAT) : at.toLocalDate().toString();
     }
