@@ -1,8 +1,9 @@
 package crack;
 
-import crack.task.Task;
 import java.util.List;
 import java.util.Scanner;
+
+import crack.task.Task;
 
 /**
  * Everything Crack says to the user, and how it hears back.

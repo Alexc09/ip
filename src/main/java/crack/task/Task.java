@@ -1,6 +1,5 @@
 package crack.task;
 
-import crack.CrackException;
 import java.time.LocalDate;
 
 /**

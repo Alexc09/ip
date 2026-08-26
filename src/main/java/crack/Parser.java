@@ -10,6 +10,9 @@ import crack.task.Todo;
  * Makes sense of what the user typed, turning raw lines into commands and tasks.
  */
 public class Parser {
+    private static final String EVENT_FORMAT_HINT = "An event needs a '/from' and a '/to', "
+            + "like: event project meeting /from 2/12/2020 1400 /to 2/12/2020 1600";
+
     /**
      * One line of input, split into the command word and everything after it.
      *
@@ -17,6 +20,9 @@ public class Parser {
      * @param arguments The rest of the line, trimmed, or blank if there was none.
      */
     public record Parsed(Command command, String arguments) {
+    }
+
+    private Parser() {
     }
 
     /**
@@ -71,11 +77,11 @@ public class Parser {
         if (parts.length < 2) {
             throw new CrackException(EVENT_FORMAT_HINT);
         }
-        String[] period = parts[1].split(" /to ", 2);
-        if (period.length < 2 || period[0].isBlank() || period[1].isBlank()) {
+        String[] periodParts = parts[1].split(" /to ", 2);
+        if (periodParts.length < 2 || periodParts[0].isBlank() || periodParts[1].isBlank()) {
             throw new CrackException(EVENT_FORMAT_HINT);
         }
-        return Event.of(requireDescription(parts[0].trim(), "event"), period[0].trim(), period[1].trim());
+        return Event.of(requireDescription(parts[0].trim(), "event"), periodParts[0].trim(), periodParts[1].trim());
     }
 
     /**
@@ -119,9 +125,6 @@ public class Parser {
         }
         return TaskDate.parse(arguments);
     }
-
-    private static final String EVENT_FORMAT_HINT = "An event needs a '/from' and a '/to', "
-            + "like: event project meeting /from 2/12/2020 1400 /to 2/12/2020 1600";
 
     /**
      * Returns the description unchanged, as long as the user actually gave one.

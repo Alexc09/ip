@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import crack.CrackException;
 import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
+
+import crack.CrackException;
 
 public class TaskTest {
     private static final LocalDate DEC_1 = LocalDate.of(2020, 12, 1);

@@ -1,8 +1,9 @@
 package crack;
 
-import crack.task.Task;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import crack.task.Task;
 
 /**
  * The tasks Crack is keeping track of, in the order the user added them.
@@ -72,7 +73,7 @@ public class TaskList {
     /**
      * Returns every task, in order.
      */
-    public ArrayList<Task> asArrayList() {
+    public ArrayList<Task> getTasks() {
         return tasks;
     }
 

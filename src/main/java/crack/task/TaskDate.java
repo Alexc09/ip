@@ -1,10 +1,11 @@
 package crack.task;
 
-import crack.CrackException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import crack.CrackException;
 
 /**
  * A date the user typed, along with a time of day if they gave one.
@@ -68,7 +69,7 @@ public class TaskDate {
     /**
      * Returns just the day, written out for display and never showing a time.
      */
-    public String dayDisplay() {
+    public String formatDay() {
         return at.format(DATE_DISPLAY);
     }
 
