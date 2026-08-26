@@ -1,7 +1,8 @@
 package crack.task;
 
-import crack.CrackException;
 import java.time.LocalDate;
+
+import crack.CrackException;
 
 /**
  * A task that has to be done by a certain date, and maybe by a certain time.

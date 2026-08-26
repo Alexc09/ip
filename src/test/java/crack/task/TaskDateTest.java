@@ -3,9 +3,11 @@ package crack.task;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import crack.CrackException;
 import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
+
+import crack.CrackException;
 
 public class TaskDateTest {
     @Test
@@ -41,8 +43,8 @@ public class TaskDateTest {
     }
 
     @Test
-    public void dayDisplay_neverShowsATime() throws CrackException {
-        assertEquals("Dec 2 2020", TaskDate.parse("2/12/2020 1500").dayDisplay());
+    public void formatDay_neverShowsATime() throws CrackException {
+        assertEquals("Dec 2 2020", TaskDate.parse("2/12/2020 1500").formatDay());
     }
 
     @Test

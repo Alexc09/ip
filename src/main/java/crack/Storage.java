@@ -1,14 +1,15 @@
 package crack;
 
-import crack.task.Deadline;
-import crack.task.Event;
-import crack.task.Task;
-import crack.task.Todo;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import crack.task.Deadline;
+import crack.task.Event;
+import crack.task.Task;
+import crack.task.Todo;
 
 /**
  * Keeps the task list on disk so it survives between runs.
@@ -64,7 +65,7 @@ public class Storage {
         File file = new File(filePath);
         file.getParentFile().mkdirs();
         try (FileWriter writer = new FileWriter(file)) {
-            for (Task task : tasks.asArrayList()) {
+            for (Task task : tasks.getTasks()) {
                 writer.write(task.toSaveFormat() + System.lineSeparator());
             }
         } catch (IOException e) {

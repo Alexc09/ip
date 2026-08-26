@@ -157,6 +157,6 @@ public class Crack {
      * @param date The day the user asked about.
      */
     private void listOn(TaskDate date) {
-        ui.showTasksOn(date.dayDisplay(), tasks.onDate(date.toLocalDate()));
+        ui.showTasksOn(date.formatDay(), tasks.onDate(date.toLocalDate()));
     }
 }

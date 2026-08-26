@@ -1,7 +1,5 @@
 package crack.task;
 
-import crack.CrackException;
-
 /**
  * A task with no date attached to it.
  */

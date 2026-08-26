@@ -3,14 +3,16 @@ package crack;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import crack.task.Deadline;
-import crack.task.Event;
-import crack.task.Todo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
+import crack.task.Deadline;
+import crack.task.Event;
+import crack.task.Todo;
 
 public class StorageTest {
     @TempDir

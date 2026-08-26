@@ -3,13 +3,15 @@ package crack;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
+
 import crack.task.Deadline;
 import crack.task.Event;
 import crack.task.Task;
 import crack.task.Todo;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import org.junit.jupiter.api.Test;
 
 public class TaskListTest {
     @Test
