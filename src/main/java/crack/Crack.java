@@ -76,6 +76,7 @@ public class Crack {
         case DEADLINE -> addTask(Parser.parseDeadline(arguments));
         case EVENT -> addTask(Parser.parseEvent(arguments));
         case ON -> listOn(Parser.parseDate(arguments));
+        case FIND -> ui.showFound(tasks.find(Parser.parseKeyword(arguments)));
         }
         return true;
     }

@@ -113,6 +113,20 @@ public class Parser {
     }
 
     /**
+     * Reads the keyword the user wants to search for.
+     *
+     * @param arguments Everything the user typed after the command word.
+     * @return The keyword to look for.
+     * @throws CrackException If no keyword was given.
+     */
+    public static String parseKeyword(String arguments) throws CrackException {
+        if (arguments.isEmpty()) {
+            throw new CrackException("Find what tho? Gimme a word to look for.");
+        }
+        return arguments;
+    }
+
+    /**
      * Reads the day the user asked about.
      *
      * @param arguments The date as the user typed it.

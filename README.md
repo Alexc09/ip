@@ -42,6 +42,7 @@ Tasks are saved to `data/data.txt`, relative to wherever you run it from.
 - deadline <description> /by <date> - add a task with deadline
 - event <description> /from <date> /to <date> - add a task spanning two dates
 - on <date> - list deadlines due that day and events happening on that day
+- find <keyword> - list tasks whose description contains the keyword
 - mark <number> - mark a task done
 - unmark <number> - mark a task as not done
 - delete <number> - remove a task

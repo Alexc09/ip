@@ -147,6 +147,22 @@ public class Ui {
     }
 
     /**
+     * Prints the tasks that matched a search, numbered from one.
+     *
+     * @param matches The tasks whose descriptions contained the keyword.
+     */
+    public void showFound(List<Task> matches) {
+        if (matches.isEmpty()) {
+            System.out.println("Ain't nothing matching that, gng.");
+            return;
+        }
+        System.out.println("Here's what matched:");
+        for (int i = 0; i < matches.size(); i++) {
+            System.out.println((i + 1) + "." + matches.get(i));
+        }
+    }
+
+    /**
      * Says how many tasks are left.
      *
      * @param count The number of tasks in the list.

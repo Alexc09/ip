@@ -49,6 +49,34 @@ public class TaskListTest {
     }
 
     @Test
+    public void find_keywordInDescription_keepsOnlyMatches() throws CrackException {
+        TaskList tasks = new TaskList();
+        tasks.add(new Todo("read book"));
+        tasks.add(Deadline.of("return book", "2/12/2020 1500"));
+        tasks.add(new Todo("buy milk"));
+
+        ArrayList<Task> matches = tasks.find("book");
+        assertEquals(2, matches.size());
+        assertEquals("[T][ ] read book", matches.get(0).toString());
+        assertEquals("[D][ ] return book (by: Dec 2 2020, 3:00 PM)", matches.get(1).toString());
+    }
+
+    @Test
+    public void find_noMatch_comesBackEmpty() {
+        TaskList tasks = new TaskList();
+        tasks.add(new Todo("buy milk"));
+        assertTrue(tasks.find("book").isEmpty());
+    }
+
+    @Test
+    public void find_matchIsCaseSensitive_doesNotMatchDifferentCase() {
+        TaskList tasks = new TaskList();
+        tasks.add(new Todo("read book"));
+        assertTrue(tasks.find("Book").isEmpty());
+        assertEquals(1, tasks.find("book").size());
+    }
+
+    @Test
     public void onDate_nothingThatDay_comesBackEmpty() throws CrackException {
         TaskList tasks = new TaskList();
         tasks.add(Deadline.of("return book", "2/12/2020"));
