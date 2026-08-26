@@ -78,6 +78,22 @@ public class TaskList {
     }
 
     /**
+     * Returns only the tasks whose description contains the given keyword.
+     *
+     * @param keyword The text being searched for.
+     * @return The matching tasks, in list order.
+     */
+    public ArrayList<Task> find(String keyword) {
+        ArrayList<Task> matches = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.matches(keyword)) {
+                matches.add(task);
+            }
+        }
+        return matches;
+    }
+
+    /**
      * Returns only the tasks landing on the given day.
      * Deadlines match the day they are due, and events match every day they span.
      *

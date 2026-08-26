@@ -49,6 +49,17 @@ public class Task {
     }
 
     /**
+     * Returns whether this task's description contains the given keyword.
+     * The match is case sensitive.
+     *
+     * @param keyword The text being searched for.
+     * @return True if the description contains it.
+     */
+    public boolean matches(String keyword) {
+        return description.contains(keyword);
+    }
+
+    /**
      * Returns this task written the way the save file stores it.
      */
     public String toSaveFormat() {

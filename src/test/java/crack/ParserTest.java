@@ -68,6 +68,23 @@ public class ParserTest {
     }
 
     @Test
+    public void parseKeyword_wordGiven_returnsIt() throws CrackException {
+        assertEquals("book", Parser.parseKeyword("book"));
+    }
+
+    @Test
+    public void parseKeyword_blank_throws() {
+        assertThrows(CrackException.class, () -> Parser.parseKeyword(""));
+    }
+
+    @Test
+    public void parse_findCommand_recognised() throws CrackException {
+        Parser.Parsed parsed = Parser.parse("find book");
+        assertEquals(Command.FIND, parsed.command());
+        assertEquals("book", parsed.arguments());
+    }
+
+    @Test
     public void parseDate_blank_throws() {
         assertThrows(CrackException.class, () -> Parser.parseDate(""));
     }

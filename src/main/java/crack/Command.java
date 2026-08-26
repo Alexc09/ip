@@ -21,7 +21,10 @@ public enum Command {
     /** Adds a task spanning two dates. */
     EVENT("event"),
     /** Prints whatever lands on one day. */
-    ON("on");
+    ON("on"),
+
+    /** Prints every task whose description contains a keyword. */
+    FIND("find");
 
     private final String keyword;
 
