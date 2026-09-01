@@ -23,8 +23,7 @@ public class TaskListTest {
     @Test
     public void addThenRemove_handsBackWhatWasRemoved() {
         TaskList tasks = new TaskList();
-        tasks.add(new Todo("buy milk"));
-        tasks.add(new Todo("walk dog"));
+        tasks.add(new Todo("buy milk"), new Todo("walk dog"));
         assertEquals(2, tasks.size());
 
         Task removed = tasks.remove(0);
@@ -36,10 +35,10 @@ public class TaskListTest {
     @Test
     public void onDate_keepsOnlyWhatLandsThatDay() throws CrackException {
         TaskList tasks = new TaskList();
-        tasks.add(new Todo("buy milk"));
-        tasks.add(Deadline.of("return book", "2/12/2020 1500"));
-        tasks.add(Event.of("carnival", "1/12/2020 1400", "3/12/2020 1800"));
-        tasks.add(Deadline.of("other thing", "2019-10-15"));
+        tasks.add(new Todo("buy milk"),
+                Deadline.of("return book", "2/12/2020 1500"),
+                Event.of("carnival", "1/12/2020 1400", "3/12/2020 1800"),
+                Deadline.of("other thing", "2019-10-15"));
 
         ArrayList<Task> matches = tasks.onDate(LocalDate.of(2020, 12, 2));
         assertEquals(2, matches.size());
@@ -51,9 +50,9 @@ public class TaskListTest {
     @Test
     public void find_keywordInDescription_keepsOnlyMatches() throws CrackException {
         TaskList tasks = new TaskList();
-        tasks.add(new Todo("read book"));
-        tasks.add(Deadline.of("return book", "2/12/2020 1500"));
-        tasks.add(new Todo("buy milk"));
+        tasks.add(new Todo("read book"),
+                Deadline.of("return book", "2/12/2020 1500"),
+                new Todo("buy milk"));
 
         ArrayList<Task> matches = tasks.find("book");
         assertEquals(2, matches.size());
