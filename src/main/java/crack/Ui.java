@@ -22,14 +22,31 @@ public class Ui {
     private final Scanner scanner = new Scanner(System.in);
 
     /**
-     * Greets the user.
+     * Prints one line of output.
+     * The GUI overrides this to collect the same wording instead of printing it.
+     *
+     * @param line The line to show.
+     */
+    protected void print(String line) {
+        System.out.println(line);
+    }
+
+    /**
+     * Greets the user, banner and all.
      */
     public void showWelcome() {
-        System.out.println(DIVIDER);
-        System.out.println(BANNER);
-        System.out.println("Yo! Crack pulled up.");
-        System.out.println("What we cooking today, gng?");
-        System.out.println(DIVIDER);
+        showLine();
+        print(BANNER);
+        showGreeting();
+        showLine();
+    }
+
+    /**
+     * Says hello without the banner, which needs a fixed width font to line up.
+     */
+    public void showGreeting() {
+        print("Yo! Crack pulled up.");
+        print("What we cooking today, gng?");
     }
 
     /**
@@ -50,7 +67,7 @@ public class Ui {
      * Draws the line that separates one message from the next.
      */
     public void showLine() {
-        System.out.println(DIVIDER);
+        print(DIVIDER);
     }
 
     /**
@@ -59,14 +76,14 @@ public class Ui {
      * @param message What went wrong.
      */
     public void showError(String message) {
-        System.out.println(message);
+        print(message);
     }
 
     /**
      * Signs off.
      */
     public void showGoodbye() {
-        System.out.println("Aight bet, I'm finna fade.");
+        print("Aight bet, I'm finna fade.");
     }
 
     /**
@@ -76,8 +93,8 @@ public class Ui {
      * @param count How many tasks there are now.
      */
     public void showAdded(Task task, int count) {
-        System.out.println("Bet, added ts to the list:");
-        System.out.println("  " + task);
+        print("Bet, added ts to the list:");
+        print("  " + task);
         showCount(count);
     }
 
@@ -88,8 +105,8 @@ public class Ui {
      * @param count How many tasks are left.
      */
     public void showRemoved(Task task, int count) {
-        System.out.println("Aight, yeeted ts off the list:");
-        System.out.println("  " + task);
+        print("Aight, yeeted ts off the list:");
+        print("  " + task);
         showCount(count);
     }
 
@@ -99,8 +116,8 @@ public class Ui {
      * @param task The task that was marked.
      */
     public void showMarked(Task task) {
-        System.out.println("Ayo let's go, ts is done:");
-        System.out.println("  " + task);
+        print("Ayo let's go, ts is done:");
+        print("  " + task);
     }
 
     /**
@@ -109,8 +126,8 @@ public class Ui {
      * @param task The task that was unmarked.
      */
     public void showUnmarked(Task task) {
-        System.out.println("Aight, ts ain't done no more:");
-        System.out.println("  " + task);
+        print("Aight, ts ain't done no more:");
+        print("  " + task);
     }
 
     /**
@@ -120,12 +137,12 @@ public class Ui {
      */
     public void showList(TaskList tasks) {
         if (tasks.isEmpty()) {
-            System.out.println("Your list is empty, you free rn.");
+            print("Your list is empty, you free rn.");
             return;
         }
-        System.out.println("Here's what you got on deck:");
+        print("Here's what you got on deck:");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + "." + tasks.get(i));
+            print((i + 1) + "." + tasks.get(i));
         }
     }
 
@@ -137,12 +154,12 @@ public class Ui {
      */
     public void showTasksOn(String day, List<Task> matches) {
         if (matches.isEmpty()) {
-            System.out.println("Nothing on " + day + ", you free that day.");
+            print("Nothing on " + day + ", you free that day.");
             return;
         }
-        System.out.println("Here's what you got on " + day + ":");
+        print("Here's what you got on " + day + ":");
         for (Task task : matches) {
-            System.out.println("  " + task);
+            print("  " + task);
         }
     }
 
@@ -153,12 +170,12 @@ public class Ui {
      */
     public void showFound(List<Task> matches) {
         if (matches.isEmpty()) {
-            System.out.println("Ain't nothing matching that, gng.");
+            print("Ain't nothing matching that, gng.");
             return;
         }
-        System.out.println("Here's what matched:");
+        print("Here's what matched:");
         for (int i = 0; i < matches.size(); i++) {
-            System.out.println((i + 1) + "." + matches.get(i));
+            print((i + 1) + "." + matches.get(i));
         }
     }
 
@@ -168,6 +185,6 @@ public class Ui {
      * @param count The number of tasks in the list.
      */
     private void showCount(int count) {
-        System.out.println("You got " + count + (count == 1 ? " thing" : " things") + " lined up now.");
+        print("You got " + count + (count == 1 ? " thing" : " things") + " lined up now.");
     }
 }

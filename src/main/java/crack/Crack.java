@@ -20,7 +20,17 @@ public class Crack {
      * @param filePath Where the save file lives.
      */
     public Crack(String filePath) {
-        this.ui = new Ui();
+        this(filePath, new Ui());
+    }
+
+    /**
+     * Wires up the chatbot against the given save file, talking through the given interface.
+     *
+     * @param filePath Where the save file lives.
+     * @param ui How the chatbot talks to the user, console or window.
+     */
+    public Crack(String filePath, Ui ui) {
+        this.ui = ui;
         this.storage = new Storage(filePath);
         this.tasks = loadTasks();
     }
@@ -43,12 +53,24 @@ public class Crack {
         while (isRunning && ui.hasNextCommand()) {
             String input = ui.readCommand();
             ui.showLine();
-            try {
-                isRunning = handle(input);
-            } catch (CrackException e) {
-                ui.showError(e.getMessage());
-            }
+            isRunning = accept(input);
             ui.showLine();
+        }
+    }
+
+    /**
+     * Runs one line of input, reporting anything that went wrong through the interface.
+     * The window uses this the same way the command loop does.
+     *
+     * @param input The whole line the user typed.
+     * @return False once the user has said bye, true otherwise.
+     */
+    public boolean accept(String input) {
+        try {
+            return handle(input);
+        } catch (CrackException e) {
+            ui.showError(e.getMessage());
+            return true;
         }
     }
 
