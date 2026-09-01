@@ -64,19 +64,21 @@ public class Crack {
         String arguments = parsed.arguments();
 
         switch (parsed.command()) {
-        case BYE -> {
-            ui.showGoodbye();
-            return false;
-        }
-        case LIST -> ui.showList(tasks);
-        case MARK -> markTask(Parser.parseIndex(arguments, tasks.size()));
-        case UNMARK -> unmarkTask(Parser.parseIndex(arguments, tasks.size()));
-        case DELETE -> deleteTask(Parser.parseIndex(arguments, tasks.size()));
-        case TODO -> addTask(Parser.parseTodo(arguments));
-        case DEADLINE -> addTask(Parser.parseDeadline(arguments));
-        case EVENT -> addTask(Parser.parseEvent(arguments));
-        case ON -> listOn(Parser.parseDate(arguments));
-        case FIND -> ui.showFound(tasks.find(Parser.parseKeyword(arguments)));
+            case BYE -> {
+                ui.showGoodbye();
+                return false;
+            }
+            case LIST -> ui.showList(tasks);
+            case MARK -> markTask(Parser.parseIndex(arguments, tasks.size()));
+            case UNMARK -> unmarkTask(Parser.parseIndex(arguments, tasks.size()));
+            case DELETE -> deleteTask(Parser.parseIndex(arguments, tasks.size()));
+            case TODO -> addTask(Parser.parseTodo(arguments));
+            case DEADLINE -> addTask(Parser.parseDeadline(arguments));
+            case EVENT -> addTask(Parser.parseEvent(arguments));
+            case ON -> listOn(Parser.parseDate(arguments));
+            case FIND -> ui.showFound(tasks.find(Parser.parseKeyword(arguments)));
+            // Parser only ever hands back a command listed above.
+            default -> { }
         }
         return true;
     }
