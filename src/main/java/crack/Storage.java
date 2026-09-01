@@ -87,10 +87,10 @@ public class Storage {
         Task task;
         try {
             task = switch (parts[0]) {
-            case "T" -> new Todo(parts[2]);
-            case "D" -> parts.length < 4 ? null : Deadline.of(parts[2], parts[3]);
-            case "E" -> parts.length < 5 ? null : Event.of(parts[2], parts[3], parts[4]);
-            default -> null;
+                case "T" -> new Todo(parts[2]);
+                case "D" -> parts.length < 4 ? null : Deadline.of(parts[2], parts[3]);
+                case "E" -> parts.length < 5 ? null : Event.of(parts[2], parts[3], parts[4]);
+                default -> null;
             };
         } catch (CrackException e) {
             return null;
