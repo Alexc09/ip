@@ -30,10 +30,10 @@ public class StorageTest {
         Storage storage = new Storage(file.toString());
 
         TaskList tasks = new TaskList();
-        tasks.add(new Todo("buy milk"));
-        tasks.add(Deadline.of("return book", "2/12/2020 1500"));
-        tasks.add(Deadline.of("other thing", "2019-10-15"));
-        tasks.add(Event.of("carnival", "1/12/2020 1400", "3/12/2020 1800"));
+        tasks.add(new Todo("buy milk"),
+                Deadline.of("return book", "2/12/2020 1500"),
+                Deadline.of("other thing", "2019-10-15"),
+                Event.of("carnival", "1/12/2020 1400", "3/12/2020 1800"));
         tasks.get(0).markAsDone();
         storage.save(tasks);
 
