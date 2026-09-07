@@ -1,5 +1,7 @@
 package crack;
 
+import java.util.Arrays;
+
 /**
  * The commands Crack knows, each tied to the word the user types.
  */
@@ -40,11 +42,9 @@ public enum Command {
      * @throws CrackException If no command uses that word.
      */
     public static Command fromKeyword(String keyword) throws CrackException {
-        for (Command command : values()) {
-            if (command.keyword.equals(keyword)) {
-                return command;
-            }
-        }
-        throw new CrackException("Nah bro, I got no clue what ts means.");
+        return Arrays.stream(values())
+                .filter(command -> command.keyword.equals(keyword))
+                .findFirst()
+                .orElseThrow(() -> new CrackException("Nah bro, I got no clue what ts means."));
     }
 }

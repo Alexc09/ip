@@ -2,6 +2,7 @@ package crack;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import crack.task.Task;
 
@@ -86,13 +87,9 @@ public class TaskList {
      * @return The matching tasks, in list order.
      */
     public ArrayList<Task> find(String keyword) {
-        ArrayList<Task> matches = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.matches(keyword)) {
-                matches.add(task);
-            }
-        }
-        return matches;
+        return tasks.stream()
+                .filter(task -> task.matches(keyword))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -103,12 +100,8 @@ public class TaskList {
      * @return The matching tasks, in list order.
      */
     public ArrayList<Task> onDate(LocalDate date) {
-        ArrayList<Task> matches = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.isOn(date)) {
-                matches.add(task);
-            }
-        }
-        return matches;
+        return tasks.stream()
+                .filter(task -> task.isOn(date))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }
