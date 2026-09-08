@@ -81,8 +81,11 @@ public class CommandTest {
     }
 
     @Test
-    public void fromKeyword_wrongCase_throws() {
-        assertThrows(CrackException.class, () -> Command.fromKeyword("T"));
-        assertThrows(CrackException.class, () -> Command.fromKeyword("Todo"));
+    public void fromKeyword_anyCase_findsTheCommand() throws CrackException {
+        assertEquals(Command.TODO, Command.fromKeyword("Todo"));
+        assertEquals(Command.TODO, Command.fromKeyword("TODO"));
+        assertEquals(Command.TODO, Command.fromKeyword("T"));
+        assertEquals(Command.LIST, Command.fromKeyword("List"));
+        assertEquals(Command.BYE, Command.fromKeyword("BYE"));
     }
 }

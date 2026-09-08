@@ -24,10 +24,15 @@ public class Event extends Task {
      * @param from When it starts, as the user typed it.
      * @param to When it ends, as the user typed it.
      * @return The new event.
-     * @throws CrackException If either date cannot be read.
+     * @throws CrackException If either date cannot be read, or the end comes first.
      */
     public static Event of(String description, String from, String to) throws CrackException {
-        return new Event(description, TaskDate.parse(from), TaskDate.parse(to));
+        TaskDate start = TaskDate.parse(from);
+        TaskDate end = TaskDate.parse(to);
+        if (start.isAfter(end)) {
+            throw new CrackException("Nah gng, an event can't wrap up before it kicks off.");
+        }
+        return new Event(description, start, end);
     }
 
     /**

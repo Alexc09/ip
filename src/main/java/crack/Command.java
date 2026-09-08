@@ -2,6 +2,7 @@ package crack;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The commands Crack knows, each tied to the words the user can type for it,
@@ -45,15 +46,17 @@ public enum Command {
 
     /**
      * Returns the command matching the word the user typed.
-     * A command answers to its full name and to any alias listed against it.
+     * A command answers to its full name and to any alias listed against it,
+     * in whatever capitalisation the user happened to use.
      *
      * @param keyword The first word of the user's input.
      * @return The matching command.
      * @throws CrackException If no command uses that word.
      */
     public static Command fromKeyword(String keyword) throws CrackException {
+        String normalised = keyword.toLowerCase(Locale.ROOT);
         return Arrays.stream(values())
-                .filter(command -> command.keywords.contains(keyword))
+                .filter(command -> command.keywords.contains(normalised))
                 .findFirst()
                 .orElseThrow(() -> new CrackException("Icl I got no clue what ts means. Type help."));
     }

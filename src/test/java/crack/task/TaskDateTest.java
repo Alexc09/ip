@@ -53,4 +53,17 @@ public class TaskDateTest {
         assertThrows(CrackException.class, () -> TaskDate.parse("2019-13-45"));
         assertThrows(CrackException.class, () -> TaskDate.parse(""));
     }
+
+    @Test
+    public void parse_dayThatDoesNotExist_throwsInsteadOfShifting() {
+        assertThrows(CrackException.class, () -> TaskDate.parse("30-2-2026"));
+        assertThrows(CrackException.class, () -> TaskDate.parse("31-4-2026"));
+        assertThrows(CrackException.class, () -> TaskDate.parse("2026-02-30 1500"));
+        assertThrows(CrackException.class, () -> TaskDate.parse("29-2-2023"));
+    }
+
+    @Test
+    public void parse_leapDayInALeapYear_isFine() throws CrackException {
+        assertEquals("Feb 29 2024", TaskDate.parse("29-2-2024").toString());
+    }
 }

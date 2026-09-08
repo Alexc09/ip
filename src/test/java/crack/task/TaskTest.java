@@ -2,6 +2,7 @@ package crack.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
@@ -55,5 +56,17 @@ public class TaskTest {
         assertTrue(event.isOn(DEC_2));
         assertTrue(event.isOn(DEC_3));
         assertFalse(event.isOn(DEC_4));
+    }
+
+    @Test
+    public void eventOf_endBeforeStart_throws() {
+        assertThrows(CrackException.class, () -> Event.of("backwards", "2026-12-05 1400", "2026-01-01 0900"));
+        assertThrows(CrackException.class, () -> Event.of("backwards", "2026-12-05 1400", "2026-12-05 1300"));
+    }
+
+    @Test
+    public void eventOf_startAndEndOnTheSameDay_isFine() throws CrackException {
+        assertEquals("[E][ ] one dayer (from: Dec 5 2026 to: Dec 5 2026)",
+                Event.of("one dayer", "2026-12-05", "2026-12-05").toString());
     }
 }

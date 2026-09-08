@@ -53,6 +53,14 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_extraSpacesAndTabs_stillFindsCommandAndArguments() throws CrackException {
+        assertEquals(Command.TODO, Parser.parse("todo   read book").command());
+        assertEquals("read book", Parser.parse("todo   read book").arguments());
+        assertEquals(Command.LIST, Parser.parse("list   ").command());
+        assertEquals("read book", Parser.parse("todo\tread book").arguments());
+    }
+
+    @Test
     public void parseIndex_validNumber_becomesZeroBased() throws CrackException {
         assertEquals(0, Parser.parseIndex("1", 3));
         assertEquals(2, Parser.parseIndex("3", 3));
