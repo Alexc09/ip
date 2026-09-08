@@ -37,7 +37,8 @@ public class Parser {
      * @throws CrackException If the first word is not a command we know.
      */
     public static Parsed parse(String input) throws CrackException {
-        String[] parts = input.split(" ", 2);
+        // Split on a run of whitespace so stray spaces or a tab do not hide the command.
+        String[] parts = input.split("\\s+", 2);
         assert parts.length >= 1 : "String.split always yields at least one part";
         Command command = Command.fromKeyword(parts[0]);
         String arguments = parts.length > 1 ? parts[1].trim() : "";

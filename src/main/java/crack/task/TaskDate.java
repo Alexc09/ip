@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 import crack.CrackException;
 
@@ -13,10 +14,14 @@ import crack.CrackException;
  */
 public class TaskDate {
     /** Date-and-time shapes we accept from the user, e.g. 2/12/2020 1500. */
-    private static final String[] DATE_TIME_FORMATS = {"yyyy-MM-dd HHmm", "d-M-yyyy HHmm"};
+    private static final DateTimeFormatter[] DATE_TIME_FORMATS = {
+        strictFormat("uuuu-MM-dd HHmm"), strictFormat("d-M-uuuu HHmm"),
+    };
 
     /** Date-only shapes we accept, e.g. 2019-10-15. */
-    private static final String[] DATE_FORMATS = {"yyyy-MM-dd", "d-M-yyyy"};
+    private static final DateTimeFormatter[] DATE_FORMATS = {
+        strictFormat("uuuu-MM-dd"), strictFormat("d-M-uuuu"),
+    };
 
     private static final DateTimeFormatter SAVE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter DATE_DISPLAY = DateTimeFormatter.ofPattern("MMM d yyyy");
@@ -42,22 +47,44 @@ public class TaskDate {
     public static TaskDate parse(String input) throws CrackException {
         // Slashes and dashes are the same to us, so we only match against dashes below.
         String cleaned = input.replace('/', '-');
-        for (String format : DATE_TIME_FORMATS) {
+        for (DateTimeFormatter format : DATE_TIME_FORMATS) {
             try {
-                return new TaskDate(LocalDateTime.parse(cleaned, DateTimeFormatter.ofPattern(format)), true);
+                return new TaskDate(LocalDateTime.parse(cleaned, format), true);
             } catch (DateTimeParseException e) {
                 continue;
             }
         }
-        for (String format : DATE_FORMATS) {
+        for (DateTimeFormatter format : DATE_FORMATS) {
             try {
-                LocalDate date = LocalDate.parse(cleaned, DateTimeFormatter.ofPattern(format));
-                return new TaskDate(date.atStartOfDay(), false);
+                return new TaskDate(LocalDate.parse(cleaned, format).atStartOfDay(), false);
             } catch (DateTimeParseException e) {
                 continue;
             }
         }
-        throw new CrackException("'" + input + "' ain't a date I get. Try 2/12/2020 1500 or 2019-10-15.");
+        throw new CrackException("'" + input + "' ain't a real date gng. Try 2/12/2020 1500 or 2019-10-15.");
+    }
+
+    /**
+     * Builds a formatter that rejects days that do not exist rather than
+     * nudging them to the nearest one that does.
+     * Strict resolution needs the proleptic year 'uuuu' in place of 'yyyy',
+     * which carries no era of its own.
+     *
+     * @param pattern The date pattern to read.
+     * @return A formatter that will not quietly move the date.
+     */
+    private static DateTimeFormatter strictFormat(String pattern) {
+        return DateTimeFormatter.ofPattern(pattern).withResolverStyle(ResolverStyle.STRICT);
+    }
+
+    /**
+     * Returns whether this lands strictly later than another date.
+     *
+     * @param other The date being compared against.
+     * @return True if this one comes after it.
+     */
+    public boolean isAfter(TaskDate other) {
+        return at.isAfter(other.at);
     }
 
     /**

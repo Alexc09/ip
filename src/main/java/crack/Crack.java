@@ -52,6 +52,9 @@ public class Crack {
         boolean isRunning = true;
         while (isRunning && ui.hasNextCommand()) {
             String input = ui.readCommand();
+            if (input.isEmpty()) {
+                continue;
+            }
             ui.showLine();
             isRunning = accept(input);
             ui.showLine();
@@ -140,8 +143,8 @@ public class Crack {
      */
     private void addTask(Task task) {
         tasks.add(task);
-        save();
         ui.showAdded(task, tasks.size());
+        save();
     }
 
     /**
@@ -152,8 +155,8 @@ public class Crack {
     private void deleteTask(int index) {
         assert index >= 0 && index < tasks.size() : "Parser.parseIndex should have rejected index " + index;
         Task task = tasks.remove(index);
-        save();
         ui.showRemoved(task, tasks.size());
+        save();
     }
 
     /**
@@ -165,8 +168,8 @@ public class Crack {
         assert index >= 0 && index < tasks.size() : "Parser.parseIndex should have rejected index " + index;
         Task task = tasks.get(index);
         task.markAsDone();
-        save();
         ui.showMarked(task);
+        save();
     }
 
     /**
@@ -178,8 +181,8 @@ public class Crack {
         assert index >= 0 && index < tasks.size() : "Parser.parseIndex should have rejected index " + index;
         Task task = tasks.get(index);
         task.markAsNotDone();
-        save();
         ui.showUnmarked(task);
+        save();
     }
 
     /**
