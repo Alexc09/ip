@@ -45,6 +45,7 @@ public class TaskList {
      * @return The task that was removed.
      */
     public Task remove(int index) {
+        assert index >= 0 && index < tasks.size() : "caller must check the index before removing";
         return tasks.remove(index);
     }
 
@@ -55,6 +56,7 @@ public class TaskList {
      * @return The task sitting there.
      */
     public Task get(int index) {
+        assert index >= 0 && index < tasks.size() : "caller must check the index before reading";
         return tasks.get(index);
     }
 

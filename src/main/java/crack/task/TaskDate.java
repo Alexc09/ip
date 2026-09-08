@@ -26,6 +26,7 @@ public class TaskDate {
     private final boolean hasTime;
 
     private TaskDate(LocalDateTime at, boolean hasTime) {
+        assert at != null : "a TaskDate always wraps a date that parsed cleanly";
         this.at = at;
         this.hasTime = hasTime;
     }

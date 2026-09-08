@@ -38,6 +38,7 @@ public class Parser {
      */
     public static Parsed parse(String input) throws CrackException {
         String[] parts = input.split(" ", 2);
+        assert parts.length >= 1 : "String.split always yields at least one part";
         Command command = Command.fromKeyword(parts[0]);
         String arguments = parts.length > 1 ? parts[1].trim() : "";
         return new Parsed(command, arguments);
@@ -113,7 +114,9 @@ public class Parser {
             throw new CrackException("You only got " + listSize + (listSize == 1 ? " task" : " tasks")
                     + ", so " + position + " ain't it.");
         }
-        return position - 1;
+        int index = position - 1;
+        assert index >= 0 && index < listSize : "a checked position must land inside the list";
+        return index;
     }
 
     /**
