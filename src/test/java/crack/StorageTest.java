@@ -63,4 +63,40 @@ public class StorageTest {
         assertEquals("[E][X] party (from: Dec 5 2020, 8:00 PM to: Dec 5 2020, 11:00 PM)",
                 loaded.get(1).toString());
     }
+
+    @Test
+    public void saveThenLoad_descriptionContainingTheSeparator_survivesWhole() throws CrackException {
+        Path file = tempDir.resolve("data").resolve("data.txt");
+
+        TaskList tasks = new TaskList();
+        tasks.add(new Todo("email bob | cc alice"),
+                Deadline.of("ship v1 | final", "18-9-2026 2359"),
+                Event.of("standup | daily", "14-9-2026 1400", "14-9-2026 1600"));
+        new Storage(file.toString()).save(tasks);
+
+        TaskList loaded = new Storage(file.toString()).load();
+        assertEquals(3, loaded.size());
+        assertEquals("[T][ ] email bob | cc alice", loaded.get(0).toString());
+        assertEquals("[D][ ] ship v1 | final (by: Sep 18 2026, 11:59 PM)", loaded.get(1).toString());
+        assertEquals("[E][ ] standup | daily (from: Sep 14 2026, 2:00 PM to: Sep 14 2026, 4:00 PM)",
+                loaded.get(2).toString());
+    }
+
+    @Test
+    public void load_lineWithNoDescription_isSkipped() throws CrackException, IOException {
+        Path file = tempDir.resolve("data").resolve("data.txt");
+        Files.createDirectories(file.getParent());
+        Files.writeString(file, "T | 0 | \nT | 0 |    \nD | 0 |  | 2020-12-02 1500\nT | 0 | real one\n");
+
+        TaskList loaded = new Storage(file.toString()).load();
+        assertEquals(1, loaded.size());
+        assertEquals("[T][ ] real one", loaded.get(0).toString());
+    }
+
+    @Test
+    public void save_pathWithNoFolder_doesNotThrow() throws CrackException {
+        Storage storage = new Storage(tempDir.resolve("bare.txt").toString());
+        storage.save(new TaskList());
+        assertTrue(storage.load().isEmpty());
+    }
 }
