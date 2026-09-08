@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
 import crack.task.Deadline;
@@ -44,10 +45,7 @@ public class Storage {
         }
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
-                Task task = parse(scanner.nextLine());
-                if (task != null) {
-                    tasks.add(task);
-                }
+                parse(scanner.nextLine()).ifPresent(tasks::add);
             }
         } catch (IOException e) {
             throw new CrackException("Couldn't read your saved list, starting fresh.");
@@ -77,27 +75,40 @@ public class Storage {
      * Rebuilds one task from the line that was saved for it.
      *
      * @param line One line of the save file.
-     * @return The task, or null if the line is junk we cannot make sense of.
+     * @return The task, or nothing if the line is junk we cannot make sense of.
      */
-    private static Task parse(String line) {
+    private static Optional<Task> parse(String line) {
         String[] parts = line.split(" \\| ");
         if (parts.length < 3) {
-            return null;
+            return Optional.empty();
         }
-        Task task;
-        try {
-            task = switch (parts[0]) {
-                case "T" -> new Todo(parts[2]);
-                case "D" -> parts.length < 4 ? null : Deadline.of(parts[2], parts[3]);
-                case "E" -> parts.length < 5 ? null : Event.of(parts[2], parts[3], parts[4]);
-                default -> null;
-            };
-        } catch (CrackException e) {
-            return null;
-        }
-        if (task != null && parts[1].equals("1")) {
-            task.markAsDone();
+        Optional<Task> task = buildTask(parts);
+        if (parts[1].equals("1")) {
+            task.ifPresent(Task::markAsDone);
         }
         return task;
+    }
+
+    /**
+     * Builds the right kind of task for the type tag the line starts with.
+     *
+     * @param parts The line already split on its separator.
+     * @return The task, or nothing if the tag is unknown or its fields are missing.
+     */
+    private static Optional<Task> buildTask(String[] parts) {
+        try {
+            return switch (parts[0]) {
+                case "T" -> Optional.of(new Todo(parts[2]));
+                case "D" -> parts.length < 4
+                        ? Optional.empty()
+                        : Optional.of(Deadline.of(parts[2], parts[3]));
+                case "E" -> parts.length < 5
+                        ? Optional.empty()
+                        : Optional.of(Event.of(parts[2], parts[3], parts[4]));
+                default -> Optional.empty();
+            };
+        } catch (CrackException e) {
+            return Optional.empty();
+        }
     }
 }

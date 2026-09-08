@@ -10,6 +10,10 @@ import crack.task.Todo;
  * Makes sense of what the user typed, turning raw lines into commands and tasks.
  */
 public class Parser {
+    private static final String BY_MARKER = " /by ";
+    private static final String FROM_MARKER = " /from ";
+    private static final String TO_MARKER = " /to ";
+
     private static final String EVENT_FORMAT_HINT = "An event needs a '/from' and a '/to', "
             + "like: event project meeting /from 2/12/2020 1400 /to 2/12/2020 1600";
 
@@ -34,6 +38,7 @@ public class Parser {
      */
     public static Parsed parse(String input) throws CrackException {
         String[] parts = input.split(" ", 2);
+        assert parts.length >= 1 : "String.split always yields at least one part";
         Command command = Command.fromKeyword(parts[0]);
         String arguments = parts.length > 1 ? parts[1].trim() : "";
         return new Parsed(command, arguments);
@@ -58,7 +63,7 @@ public class Parser {
      * @throws CrackException If the "/by" is missing, or either half is unusable.
      */
     public static Task parseDeadline(String arguments) throws CrackException {
-        String[] parts = arguments.split(" /by ", 2);
+        String[] parts = arguments.split(BY_MARKER, 2);
         if (parts.length < 2 || parts[1].isBlank()) {
             throw new CrackException("A deadline needs a '/by', like: deadline return book /by 2/12/2020 1500");
         }
@@ -73,11 +78,11 @@ public class Parser {
      * @throws CrackException If "/from" or "/to" is missing, or any part is unusable.
      */
     public static Task parseEvent(String arguments) throws CrackException {
-        String[] parts = arguments.split(" /from ", 2);
+        String[] parts = arguments.split(FROM_MARKER, 2);
         if (parts.length < 2) {
             throw new CrackException(EVENT_FORMAT_HINT);
         }
-        String[] periodParts = parts[1].split(" /to ", 2);
+        String[] periodParts = parts[1].split(TO_MARKER, 2);
         if (periodParts.length < 2 || periodParts[0].isBlank() || periodParts[1].isBlank()) {
             throw new CrackException(EVENT_FORMAT_HINT);
         }
@@ -109,7 +114,9 @@ public class Parser {
             throw new CrackException("You only got " + listSize + (listSize == 1 ? " task" : " tasks")
                     + ", so " + position + " ain't it.");
         }
-        return position - 1;
+        int index = position - 1;
+        assert index >= 0 && index < listSize : "a checked position must land inside the list";
+        return index;
     }
 
     /**

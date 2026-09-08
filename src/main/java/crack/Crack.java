@@ -112,7 +112,9 @@ public class Crack {
      */
     private TaskList loadTasks() {
         try {
-            return storage.load();
+            TaskList loaded = storage.load();
+            assert loaded != null : "Storage.load hands back a list, empty at worst, never null";
+            return loaded;
         } catch (CrackException e) {
             ui.showError(e.getMessage());
             return new TaskList();
@@ -147,6 +149,7 @@ public class Crack {
      * @param index Zero based position of the task to remove.
      */
     private void deleteTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Parser.parseIndex should have rejected index " + index;
         Task task = tasks.remove(index);
         save();
         ui.showRemoved(task, tasks.size());
@@ -158,6 +161,7 @@ public class Crack {
      * @param index Zero based position of the task to mark.
      */
     private void markTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Parser.parseIndex should have rejected index " + index;
         Task task = tasks.get(index);
         task.markAsDone();
         save();
@@ -170,6 +174,7 @@ public class Crack {
      * @param index Zero based position of the task to unmark.
      */
     private void unmarkTask(int index) {
+        assert index >= 0 && index < tasks.size() : "Parser.parseIndex should have rejected index " + index;
         Task task = tasks.get(index);
         task.markAsNotDone();
         save();
