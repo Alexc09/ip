@@ -1,0 +1,146 @@
+/* Look and feel of the chat window. Colours and fonts live here so the Java
+   side only has to name a style class. */
+
+.root {
+    -fx-font-family: "Segoe UI", "SF Pro Text", "Helvetica Neue", "Arial", sans-serif;
+    -fx-font-size: 13px;
+    -fx-background-color: #f2f3f5;
+}
+
+/* Chat transcript */
+
+.chat-scroll,
+.chat-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.chat-scroll {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.chat-scroll .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.chat-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #c9ccd1;
+    -fx-background-radius: 4;
+}
+
+.chat-scroll .scroll-bar:vertical .increment-button,
+.chat-scroll .scroll-bar:vertical .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
+.dialog-container {
+    -fx-padding: 12 4 12 4;
+    -fx-spacing: 10;
+}
+
+/* Messages. Crack gets an avatar and a name, the user gets neither, so the two
+   sides of the conversation never read as the same kind of speaker. */
+
+.dialog-row {
+    -fx-spacing: 8;
+}
+
+.speaker-name {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6b7280;
+    -fx-padding: 0 0 3 2;
+}
+
+.avatar {
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+    -fx-max-width: 32px;
+    -fx-max-height: 32px;
+    -fx-alignment: center;
+    -fx-background-radius: 16;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-color: #2f6feb;
+    -fx-text-fill: white;
+}
+
+.avatar-error {
+    -fx-background-color: #d93025;
+}
+
+.bubble {
+    -fx-padding: 9 13 9 13;
+    -fx-line-spacing: 2;
+}
+
+/* Crack speaks in a light card with a squared-off corner next to the avatar. */
+.bubble-crack {
+    -fx-background-color: white;
+    -fx-text-fill: #1f2328;
+    -fx-background-radius: 3 14 14 14;
+    -fx-border-color: #e1e4e8;
+    -fx-border-radius: 3 14 14 14;
+}
+
+/* The user speaks in a solid accent bubble, mirrored to the other side. */
+.bubble-user {
+    -fx-background-color: #2f6feb;
+    -fx-text-fill: white;
+    -fx-background-radius: 14 3 14 14;
+}
+
+/* Anything that went wrong is tinted and rule-marked so it cannot be skimmed past. */
+.bubble-error {
+    -fx-background-color: #fdeceb;
+    -fx-text-fill: #a4262c;
+    -fx-border-color: #d93025;
+    -fx-border-width: 0 0 0 3;
+    -fx-background-radius: 3 14 14 14;
+    -fx-border-radius: 0;
+}
+
+/* Input row */
+
+.input-bar {
+    -fx-spacing: 8;
+    -fx-padding: 10 12 12 12;
+    -fx-background-color: white;
+    -fx-border-color: #e1e4e8;
+    -fx-border-width: 1 0 0 0;
+}
+
+.input-field {
+    -fx-background-color: #f2f3f5;
+    -fx-background-radius: 18;
+    -fx-padding: 9 14 9 14;
+    -fx-prompt-text-fill: #9aa0a6;
+}
+
+.input-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #2f6feb;
+    -fx-border-radius: 18;
+}
+
+.send-button {
+    -fx-background-color: #2f6feb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 18;
+    -fx-padding: 9 18 9 18;
+    -fx-cursor: hand;
+}
+
+.send-button:hover {
+    -fx-background-color: #2559c4;
+}
+
+.send-button:pressed {
+    -fx-background-color: #1f47a0;
+}
+
+.send-button:disabled {
+    -fx-opacity: 0.5;
+}
