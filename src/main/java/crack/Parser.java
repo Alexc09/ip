@@ -14,8 +14,8 @@ public class Parser {
     private static final String FROM_MARKER = " /from ";
     private static final String TO_MARKER = " /to ";
 
-    private static final String EVENT_FORMAT_HINT = "An event needs a '/from' and a '/to', "
-            + "like: event project meeting /from 2/12/2020 1400 /to 2/12/2020 1600";
+    private static final String EVENT_FORMAT_HINT = "Yo, an event needs a '/from' and a '/to'. "
+            + "Like: event project meeting /from 2/12/2020 1400 /to 2/12/2020 1600";
 
     /**
      * One line of input, split into the command word and everything after it.
@@ -65,7 +65,7 @@ public class Parser {
     public static Task parseDeadline(String arguments) throws CrackException {
         String[] parts = arguments.split(BY_MARKER, 2);
         if (parts.length < 2 || parts[1].isBlank()) {
-            throw new CrackException("A deadline needs a '/by', like: deadline return book /by 2/12/2020 1500");
+            throw new CrackException("Yo, a deadline needs a '/by'. Like: deadline return book /by 2/12/2020 1500");
         }
         return Deadline.of(requireDescription(parts[0].trim(), "deadline"), parts[1].trim());
     }
@@ -105,7 +105,7 @@ public class Parser {
         try {
             position = Integer.parseInt(arguments);
         } catch (NumberFormatException e) {
-            throw new CrackException("'" + arguments + "' ain't a number, gng.");
+            throw new CrackException("'" + arguments + "' ain't a number gng.");
         }
         if (listSize == 0) {
             throw new CrackException("Your list is empty, ain't nothing to point at.");
@@ -157,7 +157,7 @@ public class Parser {
      */
     private static String requireDescription(String description, String taskType) throws CrackException {
         if (description.isEmpty()) {
-            throw new CrackException("Nah gng, a " + taskType + " needs an actual description.");
+            throw new CrackException("Nah, a " + taskType + " needs an actual description gng.");
         }
         return description;
     }

@@ -4,35 +4,42 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The commands Crack knows, each tied to the words the user can type for it.
- * Most commands answer to a short alias as well as their full name.
+ * The commands Crack knows, each tied to the words the user can type for it,
+ * the arguments it takes and a one-line summary of what it does.
+ * Listed in the order the help command shows them: adding first, then looking
+ * things up, then changing what is already there.
  */
 public enum Command {
-    /** Ends the session. */
-    BYE("bye"),
-    /** Prints every task. */
-    LIST("list", "ls"),
-    /** Marks a task done. */
-    MARK("mark", "m"),
-    /** Marks a task not done. */
-    UNMARK("unmark", "um"),
-    /** Removes a task. */
-    DELETE("delete", "rm", "del"),
     /** Adds a task with no date. */
-    TODO("todo", "t"),
+    TODO("<what>", "ts with no date", "todo", "t"),
     /** Adds a task due by a date. */
-    DEADLINE("deadline", "d"),
+    DEADLINE("<what> /by <when>", "ts with a due date", "deadline", "d"),
     /** Adds a task spanning two dates. */
-    EVENT("event", "e"),
+    EVENT("<what> /from <start> /to <end>", "ts spanning two dates", "event", "e"),
+    /** Prints every task. */
+    LIST("", "everything you got on deck", "list", "ls"),
     /** Prints whatever lands on one day. */
-    ON("on"),
-
+    ON("<when>", "what lands on one day", "on"),
     /** Prints every task whose description contains a keyword. */
-    FIND("find", "f");
+    FIND("<word>", "hunt ts down by description", "find", "f"),
+    /** Marks a task done. */
+    MARK("<num>", "call ts done", "mark", "m"),
+    /** Marks a task not done. */
+    UNMARK("<num>", "put ts back on the pile", "unmark", "um"),
+    /** Removes a task. */
+    DELETE("<num>", "drop ts off the list", "delete", "rm", "del"),
+    /** Prints this list. */
+    HELP("", "this right here", "help", "h", "?"),
+    /** Ends the session. */
+    BYE("", "I fade", "bye");
 
+    private final String arguments;
+    private final String summary;
     private final List<String> keywords;
 
-    Command(String... keywords) {
+    Command(String arguments, String summary, String... keywords) {
+        this.arguments = arguments;
+        this.summary = summary;
         this.keywords = List.of(keywords);
     }
 
@@ -48,7 +55,7 @@ public enum Command {
         return Arrays.stream(values())
                 .filter(command -> command.keywords.contains(keyword))
                 .findFirst()
-                .orElseThrow(() -> new CrackException("Nah bro, I got no clue what ts means."));
+                .orElseThrow(() -> new CrackException("Icl I got no clue what ts means. Type help."));
     }
 
     /**
@@ -56,5 +63,26 @@ public enum Command {
      */
     public List<String> getKeywords() {
         return keywords;
+    }
+
+    /**
+     * Returns the short forms of this command, leaving out its full name.
+     */
+    public List<String> getAliases() {
+        return keywords.subList(1, keywords.size());
+    }
+
+    /**
+     * Returns how the command is typed out, full name followed by any arguments.
+     */
+    public String getUsage() {
+        return arguments.isEmpty() ? keywords.get(0) : keywords.get(0) + " " + arguments;
+    }
+
+    /**
+     * Returns what the command does, in Crack's words.
+     */
+    public String getSummary() {
+        return summary;
     }
 }

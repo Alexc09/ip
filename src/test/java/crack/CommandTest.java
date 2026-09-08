@@ -3,6 +3,7 @@ package crack;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,29 @@ public class CommandTest {
                 seen.add(keyword);
             }
         }
+    }
+
+    @Test
+    public void fromKeyword_helpAndItsAliases_findTheSameCommand() throws CrackException {
+        assertEquals(Command.HELP, Command.fromKeyword("help"));
+        assertEquals(Command.HELP, Command.fromKeyword("h"));
+        assertEquals(Command.HELP, Command.fromKeyword("?"));
+    }
+
+    @Test
+    public void getUsage_everyCommand_startsWithItsFullName() {
+        for (Command command : Command.values()) {
+            String fullName = command.getKeywords().get(0);
+            assertTrue(command.getUsage().startsWith(fullName),
+                    command + " usage should start with '" + fullName + "'");
+            assertFalse(command.getSummary().isBlank(), command + " needs a summary for the help list");
+        }
+    }
+
+    @Test
+    public void getAliases_leavesOutTheFullName() {
+        assertEquals(List.of("rm", "del"), Command.DELETE.getAliases());
+        assertEquals(List.of(), Command.ON.getAliases());
     }
 
     @Test

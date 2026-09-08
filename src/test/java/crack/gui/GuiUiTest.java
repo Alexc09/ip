@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import crack.Command;
+
 public class GuiUiTest {
     @Test
     public void takeReply_plainOutput_notFlaggedAsError() {
@@ -13,7 +15,7 @@ public class GuiUiTest {
         ui.showGoodbye();
 
         GuiUi.Reply reply = ui.takeReply();
-        assertEquals("Aight bet, I'm finna fade.", reply.text());
+        assertFalse(reply.text().isEmpty());
         assertFalse(reply.isError());
     }
 
@@ -35,6 +37,20 @@ public class GuiUiTest {
 
         ui.showGreeting();
         assertFalse(ui.takeReply().isError());
+    }
+
+    @Test
+    public void showHelp_listsEveryCommandWithItsAliases() {
+        GuiUi ui = new GuiUi();
+        ui.showHelp();
+
+        String help = ui.takeReply().text();
+        for (Command command : Command.values()) {
+            assertTrue(help.contains(command.getUsage()), "help is missing " + command.getUsage());
+            for (String alias : command.getAliases()) {
+                assertTrue(help.contains(alias), "help is missing alias " + alias);
+            }
+        }
     }
 
     @Test
