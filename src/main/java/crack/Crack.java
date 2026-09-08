@@ -99,6 +99,7 @@ public class Crack {
             case EVENT -> addTask(Parser.parseEvent(arguments));
             case ON -> listOn(Parser.parseDate(arguments));
             case FIND -> ui.showFound(tasks.find(Parser.parseKeyword(arguments)));
+            case HELP -> ui.showHelp();
             // Parser only ever hands back a command listed above.
             default -> { }
         }

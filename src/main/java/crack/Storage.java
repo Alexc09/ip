@@ -48,7 +48,7 @@ public class Storage {
                 parse(scanner.nextLine()).ifPresent(tasks::add);
             }
         } catch (IOException e) {
-            throw new CrackException("Couldn't read your saved list, starting fresh.");
+            throw new CrackException("Couldn't read your saved list gng. Starting fresh.");
         }
         return new TaskList(tasks);
     }
@@ -67,7 +67,7 @@ public class Storage {
                 writer.write(task.toSaveFormat() + System.lineSeparator());
             }
         } catch (IOException e) {
-            throw new CrackException("Couldn't save your list, gng.");
+            throw new CrackException("Couldn't save your list gng, I'm finna crash out.");
         }
     }
 

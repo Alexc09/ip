@@ -45,8 +45,8 @@ public class Ui {
      * Says hello without the banner, which needs a fixed width font to line up.
      */
     public void showGreeting() {
-        print("Yo! Crack pulled up.");
-        print("What we cooking today, gng?");
+        print("Ayo, Crack pulled up.");
+        print("What we locking in today gng?");
     }
 
     /**
@@ -83,7 +83,7 @@ public class Ui {
      * Signs off.
      */
     public void showGoodbye() {
-        print("Aight bet, I'm finna fade.");
+        print("Aight bet, I'm finna fade. Don't get cooked.");
     }
 
     /**
@@ -93,7 +93,7 @@ public class Ui {
      * @param count How many tasks there are now.
      */
     public void showAdded(Task task, int count) {
-        print("Bet, added ts to the list:");
+        print("Bet, ts on the list now:");
         print("  " + task);
         showCount(count);
     }
@@ -105,7 +105,7 @@ public class Ui {
      * @param count How many tasks are left.
      */
     public void showRemoved(Task task, int count) {
-        print("Aight, yeeted ts off the list:");
+        print("Say less, ts gone:");
         print("  " + task);
         showCount(count);
     }
@@ -116,7 +116,7 @@ public class Ui {
      * @param task The task that was marked.
      */
     public void showMarked(Task task) {
-        print("Ayo let's go, ts is done:");
+        print("Ayo that's a W. Ts done:");
         print("  " + task);
     }
 
@@ -126,8 +126,30 @@ public class Ui {
      * @param task The task that was unmarked.
      */
     public void showUnmarked(Task task) {
-        print("Aight, ts ain't done no more:");
+        print("Aight, ts back on the pile:");
         print("  " + task);
+    }
+
+    /**
+     * Lists every command Crack knows, its short forms and what it does.
+     */
+    public void showHelp() {
+        print("Aight, here's the whole playbook:");
+        for (Command command : Command.values()) {
+            print("  " + command.getUsage() + formatAliases(command) + " - " + command.getSummary());
+        }
+        print("Dates go 2/12/2020 1500 or 2019-10-15. Time's optional.");
+    }
+
+    /**
+     * Returns a command's short forms in brackets, or nothing when it has none.
+     *
+     * @param command The command being listed.
+     * @return The bracketed short forms, ready to sit after the usage.
+     */
+    private static String formatAliases(Command command) {
+        List<String> aliases = command.getAliases();
+        return aliases.isEmpty() ? "" : " (" + String.join(", ", aliases) + ")";
     }
 
     /**
@@ -136,7 +158,7 @@ public class Ui {
      * @param tasks The list to print.
      */
     public void showList(TaskList tasks) {
-        showNumbered(tasks.getTasks(), "Here's what you got on deck:", "Your list is empty, you free rn.");
+        showNumbered(tasks.getTasks(), "Peep what you got on deck:", "List's dry gng. You free rn.");
     }
 
     /**
@@ -147,10 +169,10 @@ public class Ui {
      */
     public void showTasksOn(String day, List<Task> matches) {
         if (matches.isEmpty()) {
-            print("Nothing on " + day + ", you free that day.");
+            print("Ain't nothing on " + day + ". You free that day fr.");
             return;
         }
-        print("Here's what you got on " + day + ":");
+        print("Here's what's cooking on " + day + ":");
         for (Task task : matches) {
             print("  " + task);
         }
@@ -162,7 +184,7 @@ public class Ui {
      * @param matches The tasks whose descriptions contained the keyword.
      */
     public void showFound(List<Task> matches) {
-        showNumbered(matches, "Here's what matched:", "Ain't nothing matching that, gng.");
+        showNumbered(matches, "Aight, peep what I dug up:", "Nah, nothing matching that gng.");
     }
 
     /**
@@ -189,6 +211,10 @@ public class Ui {
      * @param count The number of tasks in the list.
      */
     private void showCount(int count) {
-        print("You got " + count + (count == 1 ? " thing" : " things") + " lined up now.");
+        if (count == 0) {
+            print("List's clear. You goated fr.");
+            return;
+        }
+        print("That's " + count + (count == 1 ? " thing" : " things") + " on deck now.");
     }
 }
