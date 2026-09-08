@@ -136,14 +136,7 @@ public class Ui {
      * @param tasks The list to print.
      */
     public void showList(TaskList tasks) {
-        if (tasks.isEmpty()) {
-            print("Your list is empty, you free rn.");
-            return;
-        }
-        print("Here's what you got on deck:");
-        for (int i = 0; i < tasks.size(); i++) {
-            print((i + 1) + "." + tasks.get(i));
-        }
+        showNumbered(tasks.getTasks(), "Here's what you got on deck:", "Your list is empty, you free rn.");
     }
 
     /**
@@ -169,13 +162,24 @@ public class Ui {
      * @param matches The tasks whose descriptions contained the keyword.
      */
     public void showFound(List<Task> matches) {
-        if (matches.isEmpty()) {
-            print("Ain't nothing matching that, gng.");
+        showNumbered(matches, "Here's what matched:", "Ain't nothing matching that, gng.");
+    }
+
+    /**
+     * Prints tasks numbered from one, or says so when there are none.
+     *
+     * @param tasks The tasks to print.
+     * @param heading What to say above the list.
+     * @param emptyMessage What to say instead when the list is empty.
+     */
+    private void showNumbered(List<Task> tasks, String heading, String emptyMessage) {
+        if (tasks.isEmpty()) {
+            print(emptyMessage);
             return;
         }
-        print("Here's what matched:");
-        for (int i = 0; i < matches.size(); i++) {
-            print((i + 1) + "." + matches.get(i));
+        print(heading);
+        for (int i = 0; i < tasks.size(); i++) {
+            print((i + 1) + "." + tasks.get(i));
         }
     }
 
